@@ -9,7 +9,7 @@ from pathlib import Path
 
 class CustomConfig(Config):
     """.env 파일을 utf-8로 읽기 위한 CustomConfig 클래스"""
-    def _read_file(self, file_name: str | Path) -> dict[str, str]:
+    def _read_file(self, file_name: str | Path, encoding: str = "utf-8") -> dict[str, str]:
         file_values: dict[str, str] = {}
         with open(file_name, encoding="utf-8") as input_file:
             for line in input_file.readlines():
