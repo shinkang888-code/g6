@@ -38,7 +38,7 @@ class DBSetting:
 
     supported_engines = {
         "mysql": "mysql+pymysql",
-        "postgresql": "postgresql",
+        "postgresql": "postgresql+psycopg2",
         "sqlite": "sqlite:///sqlite3.db"
     }
 
@@ -100,7 +100,7 @@ class DBSetting:
                         query_option = {"client_encoding": 'utf8'}
                     else:
                         query_option = {"client_encoding": self._charset}
-                url = URL(
+                url = URL.create(
                     drivername=db_driver,
                     username=self._user,
                     password=self._password,

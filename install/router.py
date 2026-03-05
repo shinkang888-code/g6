@@ -155,14 +155,34 @@ async def install(
 
         return templates.TemplateResponse("result.html", {"request": request})
 
+    except UnicodeDecodeError as e:
+        if os.path.exists(ENV_PATH):
+            os.remove(ENV_PATH)
+        raise AlertException(
+            "설치가 실패했습니다. 데이터베이스 연결에 실패했습니다.\\n"
+            "PostgreSQL 서버의 메시지 인코딩이 UTF-8이 아닙니다.\\n"
+            "postgresql.conf의 lc_messages를 'C' 또는 'en_US.UTF-8'로 설정하거나, "
+            "호스트/포트/계정 정보를 다시 확인해 주세요."
+        ) from e
+
     except OperationalError as e:
-        os.remove(ENV_PATH)
-        message = e._message().replace('"', r'\"').strip()
+        if os.path.exists(ENV_PATH):
+            os.remove(ENV_PATH)
+        try:
+            message = str(e.orig) if e.orig else str(e)
+        except UnicodeDecodeError:
+            message = "데이터베이스 서버 연결에 실패했습니다. 호스트/포트/계정 정보를 확인해 주세요."
+        message = message.replace('"', r'\"').strip()
         raise AlertException(f"설치가 실패했습니다. 데이터베이스 연결에 실패했습니다.\\n{message}") from e
 
     except Exception as e:
-        os.remove(ENV_PATH)
-        raise AlertException(f"설치가 실패했습니다.\\n{e}") from e
+        if os.path.exists(ENV_PATH):
+            os.remove(ENV_PATH)
+        try:
+            error_msg = str(e)
+        except UnicodeDecodeError:
+            error_msg = f"{type(e).__name__}: 에러 메시지를 표시할 수 없습니다."
+        raise AlertException(f"설치가 실패했습니다.\\n{error_msg}") from e
 
 
 @router.get("/process",
@@ -193,7 +213,7 @@ async def install_process():
                 table_names = metadata.tables.keys()
                 for name in table_names:
                     if name.startswith(f"{DB_TABLE_PREFIX}write_"):
-                        Table(name, metadata, autoload=True).drop(bind=engine)
+                        Table(name, metadata, autoload_with=engine).drop(bind=engine)
 
                 yield "기존 데이터베이스 테이블 삭제 완료"
 
