@@ -1,4 +1,7 @@
-
+커밋 내용 요약:
+core/database.py, install/router.py 2개 파일 수정
+커밋 해시: b30bfd46
+저장소: https://github.com/shinkang888-code/g6.git master 브랜치
 # GNUBOARD6 is Python CMS with fastapi
 <p align="center">
    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi?logo=python&color=%233776AB">
