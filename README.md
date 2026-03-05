@@ -2,6 +2,8 @@
 core/database.py, install/router.py 2개 파일 수정
 커밋 해시: b30bfd46
 저장소: https://github.com/shinkang888-code/g6.git master 브랜치
+명령어 추가 
+postsql 설치안되는 문제 확인해 
 # GNUBOARD6 is Python CMS with fastapi
 <p align="center">
    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fastapi?logo=python&color=%233776AB">
