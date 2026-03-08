@@ -58,6 +58,12 @@
             "name": "플러그인 관리",
             "url": "/plugin_list",
             "tag": "admin_plugin"
+        },
+        {
+            "id": "100430",
+            "name": "API 연동",
+            "url": "/api_integration",
+            "tag": "admin_api"
         }
     ],
     "menu200": [

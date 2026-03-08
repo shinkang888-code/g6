@@ -30,6 +30,7 @@ from admin.admin_write_count import router as admin_write_count_router
 from admin.admin_plugin import router as admin_plugin_router
 from admin.admin_cache import router as admin_cache_router
 from admin.admin_service import router as admin_service_router
+from admin.admin_api import router as admin_api_router
 
 router = APIRouter(prefix="/admin",
                    tags=["admin"],
@@ -57,6 +58,7 @@ router.include_router(admin_mail_router, tags=["admin_mail"])
 router.include_router(admin_newwin_router, tags=["admin_newwin"])
 router.include_router(admin_write_count_router, tags=["admin_write_count"])
 router.include_router(admin_plugin_router, tags=["admin_plugin"])
+router.include_router(admin_api_router, tags=["admin_api"])
 router.include_router(admin_cache_router, tags=["admin_cache"])
 router.include_router(admin_service_router, tags=["admin_service"])
 
