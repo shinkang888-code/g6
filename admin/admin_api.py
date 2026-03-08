@@ -17,18 +17,14 @@ def _is_local_host(host: str) -> bool:
     return host in ("127.0.0.1", "localhost", "::1") or host.startswith("192.168.")
 
 
-@router.get("/api_integration")
-async def api_integration(request: Request):
-    """
-    API 연동 페이지: API 기본 URL, 토큰 발급 안내, 연동 예시 제공.
-    """
+async def _api_integration_view(request: Request):
+    """API 연동 페이지 공통 로직."""
     request.session["menu_key"] = API_INTEGRATION_MENU_KEY
 
     base_url = str(request.base_url).rstrip("/")
     api_base = f"{base_url}/api/v1"
     is_local = _is_local_host(request.url.hostname or "")
 
-    # 로컬/배포용 URL 구분 표시
     local_base = "http://127.0.0.1:8000"
     local_api_base = f"{local_base}/api/v1"
     deploy_base = base_url if not is_local else base_url
@@ -46,3 +42,12 @@ async def api_integration(request: Request):
         "use_api": getattr(settings, "USE_API", True),
     }
     return templates.TemplateResponse("api_integration.html", context)
+
+
+@router.get("/api_integration", include_in_schema=False)
+@router.get("/api_integration/", include_in_schema=False)
+async def api_integration(request: Request):
+    """
+    API 연동 페이지: API 기본 URL, 토큰 발급 안내, 연동 예시 제공.
+    """
+    return await _api_integration_view(request)
