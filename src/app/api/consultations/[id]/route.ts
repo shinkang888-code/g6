@@ -1,0 +1,64 @@
+import { NextRequest, NextResponse } from "next/server";
+import {
+  getConsultationById,
+  softDeleteConsultation,
+  updateConsultation,
+} from "@/lib/consultationService";
+import { requireAuthenticatedSession } from "@/lib/adminSession";
+
+type Params = { params: Promise<{ id: string }> };
+
+export async function GET(_request: NextRequest, { params }: Params) {
+  try {
+    const { id } = await params;
+    const item = await getConsultationById(id);
+    if (!item) {
+      return NextResponse.json({ success: false, error: "상담을 찾을 수 없습니다." }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: item });
+  } catch (e) {
+    return NextResponse.json(
+      { success: false, error: e instanceof Error ? e.message : "조회 실패" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: NextRequest, { params }: Params) {
+  const auth = await requireAuthenticatedSession();
+  if ("error" in auth) return auth.error;
+
+  try {
+    const { id } = await params;
+    const body = (await request.json()) as Record<string, unknown>;
+    const updated = await updateConsultation(id, body);
+    if (!updated) {
+      return NextResponse.json({ success: false, error: "상담을 찾을 수 없습니다." }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: updated });
+  } catch (e) {
+    return NextResponse.json(
+      { success: false, error: e instanceof Error ? e.message : "수정 실패" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(_request: NextRequest, { params }: Params) {
+  const auth = await requireAuthenticatedSession();
+  if ("error" in auth) return auth.error;
+
+  try {
+    const { id } = await params;
+    const ok = await softDeleteConsultation(id);
+    if (!ok) {
+      return NextResponse.json({ success: false, error: "상담을 찾을 수 없습니다." }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: { ok: true } });
+  } catch (e) {
+    return NextResponse.json(
+      { success: false, error: e instanceof Error ? e.message : "삭제 실패" },
+      { status: 500 }
+    );
+  }
+}

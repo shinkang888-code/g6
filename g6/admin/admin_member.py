@@ -1,0 +1,336 @@
+"""회원 관리 Template Router"""
+from datetime import datetime
+from typing import List, Optional
+from typing_extensions import Annotated
+
+from fastapi import APIRouter, Depends, File, Form, Path, Request, UploadFile
+from fastapi.responses import RedirectResponse
+from sqlalchemy import delete, func, select, update
+
+from bbs.social import SocialAuthService
+from core.database import db_session
+from core.exception import AlertException
+from core.formclass import AdminMemberForm
+from core.models import Auth, Board, Group, GroupMember, Member, Memo, Point, Scrap
+from core.template import AdminTemplates
+from lib.common import (
+    get_from_list, is_none_datetime, select_query, set_url_query_params
+)
+from lib.dependency.dependencies import common_search_query_params, validate_token
+from lib.pbkdf2 import create_hash
+from lib.template_functions import get_member_level_select, get_paging
+from service.member_service import MemberImageService
+
+
+router = APIRouter()
+templates = AdminTemplates()
+# 파이썬 함수 및 변수를 jinja2 에서 사용할 수 있도록 등록
+templates.env.globals["today"] = datetime.now().strftime("%Y%m%d")
+templates.env.globals["get_member_level_select"] = get_member_level_select
+templates.env.globals["is_none_datetime"] = is_none_datetime
+
+MEMBER_MENU_KEY = "200100"
+MEMBER_ICON_DIR = "data/member"
+MEMBER_IMAGE_DIR = "data/member_image"
+# CF_MEMBER_IMG_WIDTH = 60
+# CF_MEMBER_IMG_HEIGHT = 60
+
+
+@router.get("/member_list")
+async def member_list(
+    request: Request,
+    db: db_session,
+    search_params: dict = Depends(common_search_query_params),
+):
+    """
+    회원관리 목록
+    """
+    request.session["menu_key"] = MEMBER_MENU_KEY
+
+    result = select_query(
+        request,
+        db,
+        Member,
+        search_params,
+        same_search_fields=["mb_level"],
+        prefix_search_fields=[
+            "mb_name",
+            "mb_nick",
+            "mb_tel",
+            "mb_hp",
+            "mb_datetime",
+            "mb_recommend",
+        ],
+        default_sst="mb_datetime",
+        default_sod="desc"
+    )
+
+    # 회원정보 추가 설정
+    for member in result["rows"]:
+        member.group_count = len(member.groups)
+        if not is_none_datetime(member.mb_datetime):
+            member.mb_datetime = member.mb_datetime.strftime("%y-%m-%d")
+        else:
+            member.mb_datetime = "없음"
+        if not is_none_datetime(member.mb_today_login):
+            member.mb_today_login = member.mb_today_login.strftime("%y-%m-%d")
+        else:
+            member.mb_today_login = "없음"
+
+    # 탈퇴/차단 회원수
+    leave_count = db.scalar(select(func.count(Member.mb_id)).where(Member.mb_leave_date != ""))
+    intercept_count = db.scalar(select(func.count(Member.mb_id)).where(Member.mb_intercept_date != ""))
+
+    context = {
+        "request": request,
+        "members": result["rows"],
+        "admin": request.state.login_member,  # 로그인해 있는 회원을 관리자로 간주함
+        "total_count": result["total_count"],
+        "leave_count": leave_count,
+        "intercept_count": intercept_count,
+        "paging": get_paging(
+            request, search_params["current_page"], result["total_count"]
+        ),
+    }
+    return templates.TemplateResponse("member_list.html", context)
+
+
+@router.post("/member_list_update", dependencies=[Depends(validate_token)])
+async def member_list_update(
+    request: Request,
+    db: db_session,
+    checks: List[int] = Form(None, alias="chk[]"),
+    mb_id: List[str] = Form(None, alias="mb_id[]"),
+    mb_open: List[int] = Form(None, alias="mb_open[]"),
+    mb_mailling: List[int] = Form(None, alias="mb_mailling[]"),
+    mb_sms: List[int] = Form(None, alias="mb_sms[]"),
+    mb_intercept_date: List[int] = Form(None, alias="mb_intercept_date[]"),
+    mb_level: List[str] = Form(None, alias="mb_level[]"),
+):
+    """회원관리 목록 일괄 수정"""
+    for i in checks:
+        member = db.scalar(select(Member).filter_by(mb_id=mb_id[i]))
+        if member:
+            if (request.state.config.cf_admin == mb_id[i]) or (request.state.login_member.mb_id == mb_id[i]):
+                if get_from_list(mb_intercept_date, i, 0):
+                    print("관리자와 로그인된 본인은 차단일자를 설정했다면 수정불가")
+                    continue
+
+            member.mb_open = get_from_list(mb_open, i, 0)
+            member.mb_mailling = get_from_list(mb_mailling, i, 0)
+            member.mb_sms = get_from_list(mb_sms, i, 0)
+            member.mb_intercept_date = (datetime.now().strftime("%Y%m%d") if get_from_list(mb_intercept_date, i, 0) else "")
+            member.mb_level = mb_level[i]
+            db.commit()
+
+    query_params = request.query_params
+    url = "/admin/member_list"
+    return RedirectResponse(set_url_query_params(url, query_params), 303)
+
+
+@router.post("/member_list_delete", dependencies=[Depends(validate_token)])
+async def member_list_delete(
+    request: Request,
+    db: db_session,
+    file_service: Annotated[MemberImageService, Depends()],
+    checks: List[int] = Form(None, alias="chk[]"),
+    mb_id: List[str] = Form(None, alias="mb_id[]"),
+):
+    """회원관리 목록 일괄 삭제"""
+    for i in checks:
+        # 관리자와 로그인된 본인은 삭제 불가
+        if (request.state.config.cf_admin == mb_id[i]) or (request.state.login_member.mb_id == mb_id[i]):
+            print("관리자와 로그인된 본인은 삭제 불가")
+            continue
+
+        member = db.scalar(select(Member).filter_by(mb_id=mb_id[i]))
+        if member:
+            # 이미 삭제된 회원은 제외
+            # if re.match(r"^[0-9]{8}.*삭제함", member.mb_memo):
+            #     continue
+            delete_time = datetime.now().strftime("%Y%m%d")
+            # member 의 경우 레코드를 삭제하는게 아니라 mb_id 를 남기고 모두 제거
+            member.mb_password = ""
+            member.mb_level = 1
+            member.mb_email = ""
+            member.mb_homepage = ""
+            member.mb_tel = ""
+            member.mb_hp = ""
+            member.mb_zip1 = ""
+            member.mb_zip2 = ""
+            member.mb_addr1 = ""
+            member.mb_addr2 = ""
+            member.mb_addr3 = ""
+            member.mb_point = 0
+            member.mb_profile = ""
+            member.mb_sex = ""
+            member.mb_signature = ""
+            member.mb_memo = f"{delete_time} 삭제함\n{member.mb_memo}"
+            member.mb_certify = ""
+            member.mb_adult = 0
+            member.mb_dupinfo = ""
+
+            # 나머지 테이블에서도 삭제
+            # 포인트 테이블에서 삭제
+            db.execute(delete(Point).where(Point.mb_id == member.mb_id))
+
+            # 그룹접근가능 테이블에서 삭제
+            db.execute(delete(GroupMember).where(GroupMember.mb_id == member.mb_id))
+
+            # 쪽지 테이블에서 삭제
+            db.execute(delete(Memo).where(Memo.me_send_mb_id == member.mb_id))
+
+            # 스크랩 테이블에서 삭제
+            db.execute(delete(Scrap).where(Scrap.mb_id == member.mb_id))
+
+            # 관리권한 테이블에서 삭제
+            db.execute(delete(Auth).where(Auth.mb_id == member.mb_id))
+
+            # 그룹관리자인 경우 그룹관리자를 공백으로
+            db.execute(update(Group).where(Group.gr_admin == member.mb_id).values(gr_admin=""))
+
+            # # 게시판관리자인 경우 게시판관리자를 공백으로
+            db.execute(update(Board).where(Board.bo_admin == member.mb_id).values(bo_admin=""))
+
+            # 소셜로그인에서 삭제 또는 해제
+            if SocialAuthService.check_exists_by_member_id(member.mb_id):
+                SocialAuthService.unlink_social_login(member.mb_id)
+
+            # 아이콘/이미지 삭제
+            file_service.update_image_file(member.mb_id, 'icon', None, 1)
+            file_service.update_image_file(member.mb_id, 'image', None, 1)
+
+            db.commit()
+
+    url = "/admin/member_list"
+    query_params = request.query_params
+    return RedirectResponse(set_url_query_params(url, query_params), 303)
+
+
+@router.get("/member_form")
+@router.get("/member_form/{mb_id}")
+async def member_form(
+    request: Request,
+    db: db_session,
+    mb_id: Optional[str] = None
+):
+    """회원추가, 수정 페이지"""
+    request.session["menu_key"] = MEMBER_MENU_KEY
+
+    exists_member = None
+    if mb_id:
+        exists_member = db.scalar(select(Member).filter_by(mb_id=mb_id))
+        if not exists_member:
+            raise AlertException("회원아이디가 존재하지 않습니다.")
+
+        exists_member.mb_img = MemberImageService.get_image_path(mb_id)
+        exists_member.mb_icon = MemberImageService.get_icon_path(mb_id)
+
+    context = {
+        "request": request,
+        "member": exists_member
+    }
+    return templates.TemplateResponse("member_form.html", context)
+
+
+@router.post("/member_form_update", dependencies=[Depends(validate_token)])
+async def member_form_update(
+    request: Request,
+    db: db_session,
+    file_service: Annotated[MemberImageService, Depends()],
+    form_data: Annotated[AdminMemberForm, Depends()],
+    mb_id: str = Form(...),
+    mb_icon: UploadFile = File(None),
+    mb_img: UploadFile = File(None),
+    del_mb_icon: int = Form(None),
+    del_mb_img: int = Form(None),
+):
+    """회원 추가, 수정 처리"""
+    exists_member = db.scalar(select(Member).filter_by(mb_id=mb_id))
+    if not exists_member:  # 등록 (회원아이디가 존재하지 않으면)
+
+        new_member = Member(mb_id=mb_id, **form_data.__dict__)
+
+        if not form_data.mb_password:
+            # 비밀번호가 없다면 현재시간으로 해시값을 만든후 다시 해시 (알수없게 만드는게 목적)
+            time_ymdhis = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            new_member.mb_password = create_hash(create_hash(time_ymdhis))
+
+        db.add(new_member)
+        db.commit()
+
+    else:  # 수정 (회원아이디가 존재하면)
+
+        # 관리자와 로그인된 본인은 차단일자, 탈퇴일자를 설정했다면 수정불가
+        if mb_id in (request.state.config.cf_admin, request.state.login_member.mb_id):
+            if form_data.mb_intercept_date or form_data.mb_leave_date:
+                raise AlertException("로그인된 관리자의 차단/탈퇴일자를 설정할 수 없습니다.")
+
+        # 폼 데이터 반영 후 commit
+        for field, value in form_data.__dict__.items():
+            setattr(exists_member, field, value)
+
+        db.commit()
+
+    # 이미지 검사 -> 이미지 수정(삭제 포함)
+    file_service.update_image_file(mb_id, 'image', mb_img, del_mb_img)
+    file_service.update_image_file(mb_id, 'icon', mb_icon, del_mb_icon)
+
+    url = f"/admin/member_form/{mb_id}"
+    query_params = request.query_params
+    return RedirectResponse(set_url_query_params(url, query_params), 302)
+
+
+@router.get("/check_member_id/{mb_id}")
+async def check_member_id(
+    db: db_session,
+    mb_id: str = Path(...)
+):
+    """
+    회원아이디 중복체크
+    """
+    exists_member = db.scalar(select(Member).filter_by(mb_id=mb_id))
+    if exists_member:
+        return {"result": "exists"}
+    else:
+        return {"result": "not_exists"}
+
+
+@router.get("/check_member_email/{mb_email}/{mb_id}")
+async def check_member_email(
+    db: db_session,
+    mb_email: str = Path(...),
+    mb_id: str = Path(...),
+):
+    """
+    회원이메일 중복체크
+    """
+    exists_member = db.scalar(
+        select(Member)
+        .where(Member.mb_email == mb_email)
+        .where(Member.mb_id != mb_id)
+    )
+    if exists_member:
+        return {"result": "exists"}
+    else:
+        return {"result": "not_exists"}
+
+
+@router.get("/check_member_nick/{mb_nick}/{mb_id}")
+async def check_member_nick(
+    db: db_session,
+    mb_nick: str = Path(),
+    mb_id: str = Path(),
+):
+    """
+    회원닉네임 중복체크
+    """
+    exists_member = db.scalar(
+        select(Member)
+        .where(Member.mb_nick == mb_nick)
+        .where(Member.mb_id != mb_id)
+    )
+    if exists_member:
+        return {"result": "exists"}
+    else:
+        return {"result": "not_exists"}

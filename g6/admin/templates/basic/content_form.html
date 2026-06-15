@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% import editor_macro(request) as editor %}
+
+{% block head %}
+    {{ editor.head() }}
+{% endblock head %}
+
+{% block title %}내용관리{% endblock title %}
+{% block subtitle %}내용관리{% endblock subtitle %}
+
+{% block content %}
+
+<form name="frmcontentform" action="/admin/content_form_update" onsubmit="return frmcontentform_check(this);" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="{{ "u" if content.co_id else "w" }}">
+    <input type="hidden" name="co_html" value="1">
+    <input type="hidden" name="token" value="">
+
+    <div class="tbl_frm01 tbl_wrap">
+        <table>
+            <caption>내용 관리 목록</caption>
+            <colgroup>
+                <col class="grid_4">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th scope="row"><label for="co_id">ID</label></th>
+                    <td>
+                        <span class="frm_info">20자 이내의 영문자, 숫자, _ 만 가능합니다.</span>                        
+                        <input type="text" value="{{ content.co_id }}" name="co_id" id="co_id" required  class="required  frm_input" size="20" maxlength="20">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="co_subject">제목</label></th>
+                    <td><input type="text" name="co_subject" value="{{ content.co_subject }}" id="co_subject" required class="frm_input required" size="90"></td>
+                </tr>
+                <tr>
+                    <th scope="row">내용</th>
+                    <td>
+                        {{ editor.body("co_content", content.co_content) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">모바일 내용</th>
+                    <td>
+                        {{ editor.body("co_mobile_content", content.co_mobile_content) }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="co_skin">스킨 디렉토리<strong class="blind">필수</strong></label></th>
+                    <td>
+                        {{ get_skin_select('content', 'co_skin', content.co_skin)|safe }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="co_mobile_skin">모바일스킨 디렉토리<strong class="blind">필수</strong></label></th>
+                    <td>
+                        {{ get_skin_select('content', 'co_mobile_skin', content.co_mobile_skin, device='mobile')|safe }}
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                    <th scope="row"><label for="co_tag_filter_use">태그 필터링 사용</label></th>
+                    <td>
+                        <span class="frm_info">내용에서 iframe 등의 태그를 사용하려면 사용안함으로 선택해 주십시오.</span>            <select name="co_tag_filter_use" id="co_tag_filter_use">
+                            <option value="1" selected="selected">사용함</option>
+                            <option value="0">사용안함</option>
+                        </select>
+                    </td>
+                </tr>
+                -->
+                <tr>
+                    <th scope="row"><label for="co_himg">상단이미지</label></th>
+                    <td>
+                        <input type="file" name="co_himg" id="co_himg">
+                        {% if head_image and head_image.exists %}
+                            <input type="checkbox" name="co_himg_del" value="1" id="co_himg_del"> 
+                            <label for="co_himg_del">삭제</label>
+                            <div class="head_tail_img">
+                                <img src="{{ head_image.url }}?{{ today }}" width="{{ head_image.width }}" alt="">
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="co_timg">하단이미지</label></th>
+                    <td>
+                        <input type="file" name="co_timg" id="co_timg">
+                        {% if tail_image and tail_image.exists %}
+                            <input type="checkbox" name="co_timg_del" value="1" id="co_timg_del"> 
+                            <label for="co_timg_del">삭제</label>
+                            <div class="head_tail_img">
+                                <img src="{{ tail_image.url }}?{{ today }}" width="{{ tail_image.width }}" alt="">
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn_fixed_top">
+        <a href="/admin/content_list" class="btn btn_02">목록</a>
+        <input type="submit" value="확인" class="btn btn_submit" accesskey="s">
+    </div>
+
+</form>
+
+<script>
+    function frmcontentform_check(f) {
+        errmsg = "";
+        errfld = "";
+
+        f.co_content.value = getEditorContent('co_content')
+
+        check_field(f.co_id, "ID를 입력하세요.");
+        check_field(f.co_subject, "제목을 입력하세요.");
+        check_field(f.co_content, "내용을 입력하세요.");
+        check_field(f.co_skin, "스킨을 선택하세요.");
+
+        if (errmsg != "") {
+            alert(errmsg);
+            errfld.focus();
+            return false;
+        }
+
+        f.token.value = generate_token();
+
+        return true;
+    }
+</script>
+
+{% endblock content %}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="LawyGo">
+  <rect width="512" height="512" rx="108" fill="#2563eb"/>
+  <path fill="#ffffff" d="M256 96c-8 0-14 6-14 14v36h-72c-12 0-22 10-22 22v8c0 58 32 110 82 136l26 13-10 20c-4 8 2 18 11 18h58c9 0 15-10 11-18l-10-20 26-13c50-26 82-78 82-136v-8c0-12-10-22-22-22h-72v-36c0-8-6-14-14-14zm-86 72h172v8c0 44-24 84-62 106l-24 12-24-12c-38-22-62-62-62-106z"/>
+  <text x="256" y="430" text-anchor="middle" font-family="system-ui,sans-serif" font-size="52" font-weight="700" fill="#ffffff">LawyGo</text>
+</svg>

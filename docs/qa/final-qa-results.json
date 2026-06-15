@@ -1,0 +1,116 @@
+{
+  "base": "https://lawygo.vercel.app",
+  "at": "2026-06-13T22:36:11.804Z",
+  "pass": 18,
+  "fail": 0,
+  "results": [
+    {
+      "category": "인증",
+      "name": "auth/status",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "인증",
+      "name": "auth/demo",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "인증",
+      "name": "auth/session",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "Gemini",
+      "name": "gemini GET (설정)",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "Gemini",
+      "name": "gemini POST (빈 prompt)",
+      "status": "PASS",
+      "detail": "HTTP 400"
+    },
+    {
+      "category": "법률백과",
+      "name": "legal-encyclopedia GET",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "법률백과",
+      "name": "legal-encyclopedia search",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "법률백과",
+      "name": "document-view (키 없음)",
+      "status": "PASS",
+      "detail": "HTTP 400"
+    },
+    {
+      "category": "배ner",
+      "name": "banners GET",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "데이터",
+      "name": "cases 목록",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "데이터",
+      "name": "deadlines",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "데이터",
+      "name": "clients",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "데이터",
+      "name": "staff",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "데이터",
+      "name": "finance",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "데이터",
+      "name": "notices",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "페이지",
+      "name": "/board/ai/legal_encyclopedia",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "페이지",
+      "name": "/admin/banners",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "category": "페이지",
+      "name": "/admin/settings/ai",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    }
+  ]
+}

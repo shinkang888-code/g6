@@ -1,0 +1,265 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+:root {
+  --background: #F8FAFC;
+  --foreground: #1E293B;
+  --surface: #FFFFFF;
+
+  /* LNB */
+  --lnb-width: 240px;
+  --lnb-mini-width: 64px;
+  --gnb-height: 60px;
+  --mobile-nav-height: 4.25rem;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --gnb-height: 52px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum";
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Pretendard", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* 로이고법률백과 — 특허 다면 프레임 스크롤 (가로·세로) */
+.patent-frame-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #a5b4fc #f1f5f9;
+}
+.patent-frame-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.patent-frame-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c7d2fe, #a5b4fc);
+  border-radius: 4px;
+}
+.patent-frame-scroll::-webkit-scrollbar-thumb:hover {
+  background: #818cf8;
+}
+
+/* Table number alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 사건 목록 — 모바일: 고정 열 폭 + 가로 스크롤 (겹침 방지) */
+@media (max-width: 1023px) {
+  .cases-table-mobile {
+    width: max-content;
+    min-width: var(--cases-mobile-table-min-width, 640px);
+    table-layout: fixed;
+  }
+
+  .cases-table-mobile col[data-mobile-hide="1"] {
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  .cases-table-mobile th.max-lg\:hidden,
+  .cases-table-mobile td.max-lg\:hidden {
+    display: none !important;
+  }
+
+  .cases-table-mobile .cases-mobile-case-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+}
+
+/* Skeleton shimmer */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 25%,
+    #e2e8f0 50%,
+    #f1f5f9 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* Danger pulse glow */
+.danger-pulse {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Resizable column handle */
+.resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.resize-handle:hover,
+.resize-handle.resizing {
+  background-color: #2563EB;
+}
+
+/* Custom focus styles */
+*:focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+/* Drag over effect */
+.drag-over {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 2px #2563EB;
+  transition: all 0.15s ease;
+}
+
+/* Matched card animation */
+@keyframes matchStamp {
+  0% { transform: scale(1.1) rotate(-3deg); opacity: 0; }
+  50% { transform: scale(0.95) rotate(1deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.match-stamp {
+  animation: matchStamp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 5px 1px rgba(220, 38, 38, 0.15); }
+  50% { box-shadow: 0 0 20px 4px rgba(220, 38, 38, 0.35); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  75% { transform: rotate(-15deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* Mobile safe area */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Mobile touch targets */
+@media (max-width: 1023px) {
+  input[type="text"],
+  input[type="search"],
+  input[type="password"],
+  input[type="email"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Animate pulse glow utility */
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Custom text sizes */
+.text-2xs {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* Theme: dark mode */
+html.dark {
+  color-scheme: dark;
+}
+html.dark body,
+html.dark .bg-background {
+  --background: #0F172A;
+  --foreground: #F1F5F9;
+  background: #0F172A;
+  color: #F1F5F9;
+}
+html.dark .bg-white {
+  background: #1E293B;
+}
+html.dark .border-slate-200 {
+  border-color: #334155;
+}
+html.dark .text-slate-900 {
+  color: #F1F5F9;
+}
+html.dark .text-slate-600,
+html.dark .text-text-muted {
+  color: #94A3B8;
+}
+
+/* Theme: font size */
+html[data-font-size="small"] body {
+  font-size: 13px;
+}
+html[data-font-size="large"] body {
+  font-size: 15px;
+}

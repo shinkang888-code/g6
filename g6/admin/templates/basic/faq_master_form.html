@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% import editor_macro(request) as editor %}
+
+{% block head %}
+    {{ editor.head() }}
+{% endblock head %}
+
+{% block title %}FAQ 관리{% endblock title %}
+{% block subtitle %}FAQ {{ action }} 관리{% endblock subtitle %}
+
+{% block content %}
+    {% set action='입력' if not faq_master else '수정' %}
+    {% set form_action=url_for("faq_master_add") if not faq_master else url_for("faq_master_update", fm_id=faq_master.fm_id) %}
+
+    <div class="container_wr">
+        <form name="frmfaqmasterform" action="{{ form_action }}" method="post" enctype="multipart/form-data" onsubmit="return frmfaqmasterform_check(this);">
+            <input type="hidden" name="token" value="">
+            <div class="tbl_frm01 tbl_wrap">
+                <table>
+                    <caption>FAQ {{ action }} 관리</caption>
+                    <colgroup>
+                        <col class="grid_4">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <label for="fm_order">출력순서</label>
+                            </th>
+                            <td>
+                                <span class="frm_info">숫자가 작을수록 FAQ 분류에서 먼저 출력됩니다.</span>
+                                <input type="text" id="fm_order" name="fm_order" value="{{ faq_master.fm_order }}" class="frm_input" maxlength="10" size="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="fm_subject">제목</label>
+                            </th>
+                            <td>
+                                <input type="text" id="fm_subject" name="fm_subject" value="{{ faq_master.fm_subject }}" required class="frm_input required" size="70">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="fm_himg">상단이미지</label>
+                            </th>
+                            <td>
+                                <input type="file" name="fm_himg" id="fm_himg">
+                                {% if head_image and head_image.exists %}
+                                    <input type="checkbox" name="fm_himg_del" value="1" id="fm_himg_del"> 
+                                    <label for="fm_himg_del">삭제</label>
+                                    <div class="head_tail_img">
+                                        <img src="{{ head_image.url }}?{{ today }}" width="{{ head_image.width }}" alt="">
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="fm_timg">하단이미지</label>
+                            </th>
+                            <td>
+                                <input type="file" name="fm_timg" id="fm_timg">
+                                {% if tail_image and tail_image.exists %}
+                                    <input type="checkbox" name="fm_timg_del" value="1" id="fm_timg_del"> 
+                                    <label for="fm_timg_del">삭제</label>
+                                    <div class="head_tail_img">
+                                        <img src="{{ tail_image.url }}?{{ today }}" width="{{ tail_image.width }}" alt="">
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th scope="row">상단 내용</th>
+                            <td>{{ editor.body("fm_head_html", faq_master.fm_head_html) }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">하단 내용</th>
+                            <td>{{ editor.body("fm_tail_html", faq_master.fm_tail_html) }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">모바일상단 내용</th>
+                            <td>{{ editor.body("fm_mobile_head_html", faq_master.fm_mobile_head_html) }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">모바일하단 내용</th>
+                            <td>{{ editor.body("fm_mobile_tail_html", faq_master.fm_mobile_tail_html) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn_fixed_top">
+                <a href="{{ url_for('faq_master_list') }}" class="btn btn_02">목록</a>
+                <input type="submit" value="확인" class="btn_submit btn" accesskey="s">
+            </div>
+        </form>
+    </div>
+    <script>
+        function frmfaqmasterform_check(f) {
+            errmsg = "";
+            errfld = "";
+
+            check_field(f.fm_subject, "제목을 입력하세요.");
+
+            if (errmsg != "") {
+                alert(errmsg);
+                errfld.focus();
+                return false;
+            }
+
+            f.token.value = generate_token();
+            return true;
+        }
+    </script>
+{% endblock content %}

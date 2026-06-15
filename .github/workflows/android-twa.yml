@@ -1,0 +1,51 @@
+name: Android TWA Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "android-twa/**"
+      - "src/app/manifest.ts"
+      - "public/icons/**"
+      - ".github/workflows/android-twa.yml"
+
+jobs:
+  build-aab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TWA_KEYSTORE_PASSWORD: lawygo-twa-ci-2026
+      TWA_KEY_PASSWORD: lawygo-twa-ci-2026
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build signed AAB (Gradle)
+        working-directory: android-twa
+        run: |
+          chmod +x gradlew
+          ./gradlew bundleRelease assembleRelease \
+            -Pandroid.injected.signing.store.file="$PWD/android.p12" \
+            -Pandroid.injected.signing.store.type=PKCS12 \
+            -Pandroid.injected.signing.store.password="$TWA_KEYSTORE_PASSWORD" \
+            -Pandroid.injected.signing.key.alias=lawygo \
+            -Pandroid.injected.signing.key.password="$TWA_KEY_PASSWORD"
+          ls -la app/build/outputs/bundle/release/
+          ls -la app/build/outputs/apk/release/ 2>/dev/null || true
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lawygo-twa-release
+          path: |
+            android-twa/app/build/outputs/bundle/release/*.aab
+            android-twa/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error

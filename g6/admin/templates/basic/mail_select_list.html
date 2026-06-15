@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}메일발송 대상 회원{% endblock title %}
+{% block subtitle %}메일발송 대상 회원{% endblock subtitle %}
+
+{% block content %}
+<form method="post" name="fmailselectlist" action="/admin/mail_select_result" onsubmit="return fmailselectlist_submit(this);">
+    <input type="hidden" name="token" value="">
+    <input type="hidden" name="ma_id" value="{{ ma_id }}">
+
+    <div class="tbl_head01 tbl_wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">번호</th>
+                    <th scope="col">회원아이디</th>
+                    <th scope="col">이름</th>
+                    <th scope="col">닉네임</th>
+                    <th scope="col">E-mail</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for member in members %}
+                <tr class="bg{{ loop.cycle('0', '1') }}">
+                    <td class="td_num">{{ loop.index }}</td>
+                    <td class="td_mbid">{{ member.mb_id }}</td>
+                    <td class="td_mbname">{{ member.mb_name }}</td>
+                    <td class="td_mbname">{{ member.mb_nick }}</td>
+                    <td>{{ member.mb_email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <textarea name="ma_list" style="display:none">{{ textarea_members_str }}</textarea>
+    </div>
+
+    <div class="btn_confirm01 btn_confirm">
+        <input type="submit" value="메일보내기" class="btn_submit">
+        <a href="/admin/mail_select_form/{{ ma_id }}">뒤로</a>
+    </div>
+</form>
+
+<script>
+function fmailselectlist_submit(f)
+{
+    f.token.value = generate_token();
+    if (f.token.value == "") {
+        alert("토큰 생성에 실패하였습니다.");
+        return false;
+    }
+
+    return true;
+}    
+</script>
+{% endblock content %}

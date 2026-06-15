@@ -1,0 +1,14 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "crons": [
+    {
+      "path": "/api/cron/court-deadline-sync",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/ledger",
+      "schedule": "30 6 * * *"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{% macro head() -%}
+<script src="/static/plugin/editor/ckeditor4/ckeditor.js?ver=4.11.1.1"></script>
+<script src="/static/plugin/editor/ckeditor4/config.js?ver=4.11.1.1"></script>
+<script>
+    // ckeditor4 global variables
+    let ck4editorAttachId = '';
+    let ck4editors = [];
+    
+    // 태그 id로 찾는다. 
+    function getEditorContent(id) {
+        let content = ck4editors[id].getData();
+        return content;
+    }
+
+    function setEditorContent(id, content) {
+        ck4editors[id].setData(content);
+    }
+
+</script>
+{%- endmacro %}
+
+{% macro body(tag_name, content="") -%}
+<div class="write_editor">
+    <div class="content ckeditor">
+        <textarea id="{{ tag_name }}" name="{{ tag_name }}" class="ckeditor-textarea" maxlength="65536" style="height: 0px;">
+            {{- content -}}
+        </textarea>
+        <span class="blind">board.end_web_editor</span>
+    </div>
+</div>
+<input type="hidden" name="option" value="html2">
+<script>
+    //ck4 global var - edit_head
+    ck4editorAttachId = '{{ tag_name }}'
+    ck4editors[ck4editorAttachId] = CKEDITOR.replace(ck4editorAttachId, {});
+    CKEDITOR.instances[ck4editorAttachId].on('change', function () {
+        // textarea 에 업데이트 한다.
+        this.updateElement();
+    });
+    CKEDITOR.add
+
+</script>
+{%- endmacro %}

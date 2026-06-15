@@ -1,0 +1,10 @@
+node_modules
+.next
+.tools
+android-twa
+.data
+coverage
+*.p12
+*.keystore
+*.apk
+*.aab

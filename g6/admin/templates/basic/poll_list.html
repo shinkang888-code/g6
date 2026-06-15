@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}설문조사 관리{% endblock title %}
+{% block subtitle %}설문조사 관리{% endblock subtitle %}
+
+{% block content %}
+    {% set sfl = request.query_params.get("sfl", "") %}
+    {% set stx = request.query_params.get("stx", "") %}
+
+    <div class="local_ov01 local_ov">
+        <a href="{{ url_for('poll_list') }}" class="ov_listall">전체목록</a>
+        <span class="btn_ov01">
+            <span class="ov_txt">설문조사 수</span>
+            <span class="ov_num">{{ total_count|number_format }}개</span>
+        </span>
+    </div>
+    
+    <form name="fsearch" id="fsearch" class="local_sch01 local_sch" method="get">
+        <div class="sch_last">
+            <label for="sfl" class="blind">검색대상</label>
+            <select name="sfl" id="sfl">
+                <option value="po_subject" {{ get_selected('po_subject', sfl) }}>제목</option>
+            </select>
+            <label for="stx" class="blind">검색어<strong class="blind"> 필수</strong></label>
+            <input type="text" name="stx" value="{{ stx }}" id="stx" required="" class="required frm_input">
+            <button type="submit" class="btn_submit">
+              <span class="blind">검색</span>
+            </button>
+        </div>
+    </form>
+    
+    <form name="fpolllist" id="fpolllist" action="{{ url_for('poll_list_delete')|set_query_params(request) }}" method="post" onsubmit="return fpolllist_submit(this);">
+        <input type="hidden" name="token" value="">
+        <div class="tbl_head01 tbl_wrap">
+            <table>
+                <caption>설문조사 관리 목록</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <label for="chkall" class="blind">현재 페이지 투표 전체</label>
+                            <input type="checkbox" name="chkall" value="1" id="chkall" onclick="check_all(this.form)">
+                        </th>
+                        <th scope="col">번호</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">투표권한</th>
+                        <th scope="col">투표수</th>
+                        <th scope="col">기타의견</th>
+                        <th scope="col">사용</th>
+                        <th scope="col">관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for poll in polls %}
+                        <tr class="bg{{ loop.cycle('0', '1') }}">
+                            <td class="td_chk">
+                                <label for="chk_{{ loop.index0 }}" class="blind">{{ poll.po_subject[:70] }} 설문조사</label>
+                                <input type="checkbox" name="chk[]" value="{{ poll .po_id }}" id="chk_{{ loop.index0 }}">
+                            </td>
+                            <td class="td_num">{{ poll.po_id }}</td>
+                            <td class="td_left">{{ poll.po_subject[:70] }}</td>
+                            <td class="td_num">{{ poll.po_level }}</td>
+                            <td class="td_num">{{ poll.sum_po_cnt|number_format }}</td>
+                            <td class="td_etc">{{ "사용" if poll.po_etc else "미사용" }}</td>
+                            <td class="td_use">{{ "사용" if poll.po_use else "미사용" }}</td>
+                            <td class="td_mng td_mng_s">
+                                <a href="{{ url_for('poll_form_edit', po_id=poll.po_id) }}?{{ request.query_params }}" class="btn btn_03">수정</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="8" class="empty_table">자료가 없습니다.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div class="btn_fixed_top">
+            <button type="submit" class="btn btn_02">선택삭제</button>
+            <a href="{{ url_for('poll_form_add') }}?{{ request.query_params }}" id="poll_add" class="btn btn_01">설문조사 추가</a>
+        </div>
+    </form>
+
+    {{ paging|safe }}
+    
+    <script>
+        function fpolllist_submit(f) {
+            if (!is_checked("chk[]")) {
+                alert("선택삭제 하실 항목을 하나 이상 선택하세요.");
+                return false;
+            }
+
+            if (confirm("한번 삭제한 자료는 복구할 방법이 없습니다.\n\n정말 삭제하시겠습니까?")) {
+
+                f.token.value = generate_token();
+                f.action += "?{{ request.query_params|safe }}";
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+{% endblock content %}

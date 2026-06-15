@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.log
+out/
+results*.json
+# 디버그/실측 산출물
+result-*.json
+run-*.html
+run-*.png
+run-*.txt
+probe-*.html
+probe-*.png
+captcha-*.png
+eng.traineddata

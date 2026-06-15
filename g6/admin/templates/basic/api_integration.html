@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}API 연동{% endblock title %}
+
+{% block subtitle %}API 연동{% endblock subtitle %}
+
+{% block content %}
+<style>
+.api-integration .url-box { background:#f8f9fa; border:1px solid #dee2e6; border-radius:6px; padding:12px 14px; font-family:monospace; font-size:14px; word-break:break-all; }
+.api-integration .copy-btn { margin-left:8px; padding:4px 10px; font-size:12px; cursor:pointer; border-radius:4px; border:1px solid #0d6efd; background:#0d6efd; color:#fff; }
+.api-integration .copy-btn:hover { background:#0b5ed7; }
+.api-integration .row-wrap { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+.api-integration .token-result { background:#e7f5ff; border:1px solid #74c0fc; border-radius:6px; padding:14px; margin-top:12px; word-break:break-all; font-size:13px; display:none; }
+.api-integration .token-result.show { display:block; }
+.api-integration .code-block { background:#1e1e1e; color:#e0e0e0; padding:14px; border-radius:6px; overflow-x:auto; font-size:13px; line-height:1.5; }
+.api-integration .code-block pre { margin:0; white-space:pre-wrap; }
+.api-integration .tabs { display:flex; gap:4px; margin-bottom:10px; }
+.api-integration .tabs button { padding:8px 14px; border:1px solid #dee2e6; background:#fff; border-radius:4px; cursor:pointer; }
+.api-integration .tabs button.active { background:#0d6efd; color:#fff; border-color:#0d6efd; }
+.api-integration .tab-panel { display:none; }
+.api-integration .tab-panel.active { display:block; }
+.api-integration .endpoint-list { list-style:none; padding:0; margin:0; }
+.api-integration .endpoint-list li { padding:6px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; }
+.api-integration .endpoint-list code { background:#f1f3f4; padding:2px 6px; border-radius:4px; font-size:12px; }
+.api-integration .alert-info { background:#cff4fc; border:1px solid #9eeaf9; border-radius:6px; padding:12px; margin-bottom:16px; }
+.api-integration .frm_input { padding:8px 10px; border:1px solid #ced4da; border-radius:4px; width:200px; }
+</style>
+
+<div class="api-integration">
+    {% if not use_api %}
+    <div class="alert-info">⚠️ 현재 API 사용이 비활성화되어 있습니다. <strong>기본환경설정</strong>에서 USE_API 를 True 로 설정해주세요.</div>
+    {% endif %}
+
+    <ul class="anchor">
+        <li><a href="#anc_url">API 기본 URL</a></li>
+        <li><a href="#anc_token">토큰(API 키) 발급</a></li>
+        <li><a href="#anc_examples">연동 예시 코드</a></li>
+        <li><a href="#anc_endpoints">주요 엔드포인트</a></li>
+    </ul>
+
+    <section id="anc_url">
+        <h2 class="h2_frm">API 기본 URL</h2>
+        <p class="frm_info">다른 프로그램에서 그누보드6 API를 호출할 때 사용하는 기본 주소입니다.</p>
+        <div class="tbl_frm01 tbl_wrap">
+            <table>
+                <caption>API 기본 URL</caption>
+                <colgroup><col class="grid_4"><col></colgroup>
+                <tbody>
+                    <tr>
+                        <th scope="row">로컬 환경</th>
+                        <td>
+                            <div class="row-wrap">
+                                <span class="url-box" id="local_base_url">{{ local_base_url }}</span>
+                                <button type="button" class="copy-btn" data-copy-target="local_base_url">복사</button>
+                            </div>
+                            <p class="frm_info">API 연동 기본 URL: <strong>{{ local_api_base_url }}/</strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">배포 환경</th>
+                        <td>
+                            <div class="row-wrap">
+                                <span class="url-box" id="deploy_base_url">{{ deploy_base_url }}</span>
+                                <button type="button" class="copy-btn" data-copy-target="deploy_base_url">복사</button>
+                            </div>
+                            {% if is_local %}<p class="frm_info">로컬 접속 중입니다. 배포 후에는 배포 도메인이 표시됩니다.</p>{% endif %}
+                            <p class="frm_info">API 연동 기본 URL: <strong id="deploy_api_url">{{ deploy_api_base_url }}/</strong>
+                                <button type="button" class="copy-btn" data-copy-target="deploy_api_url">복사</button>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">현재 접속 기준</th>
+                        <td>
+                            <div class="row-wrap">
+                                <span class="url-box" id="current_api_base">{{ api_base }}/</span>
+                                <button type="button" class="copy-btn" data-copy-target="current_api_base">복사</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="anc_token">
+        <h2 class="h2_frm">토큰(API 키) 발급</h2>
+        <p class="frm_info">인증이 필요한 API를 사용하려면 먼저 토큰을 발급받으세요. 회원 아이디·비밀번호로 발급합니다.</p>
+        <div class="tbl_frm01 tbl_wrap">
+            <table>
+                <caption>토큰 발급</caption>
+                <colgroup><col class="grid_4"><col></colgroup>
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="token_mb_id">회원 아이디</label></th>
+                        <td><input type="text" id="token_mb_id" class="frm_input" placeholder="admin" value=""></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="token_password">비밀번호</label></th>
+                        <td><input type="password" id="token_password" class="frm_input" placeholder="비밀번호" value=""></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">발급</th>
+                        <td>
+                            <button type="button" id="btn_issue_token" class="copy-btn">토큰 발급</button>
+                            <span id="token_error" style="color:#dc3545; margin-left:10px;"></span>
+                            <div id="token_result" class="token-result">
+                                <p><strong>Access Token</strong> <button type="button" class="copy-btn btn_copy_token" data-token-type="access">복사</button></p>
+                                <pre id="display_access_token"></pre>
+                                <p style="margin-top:10px;"><strong>Refresh Token</strong> <button type="button" class="copy-btn btn_copy_token" data-token-type="refresh">복사</button></p>
+                                <pre id="display_refresh_token"></pre>
+                                <p class="frm_info" style="margin-top:8px;">API 요청 시 헤더에 <code>Authorization: Bearer [Access Token]</code> 을 넣어 사용하세요.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="anc_examples">
+        <h2 class="h2_frm">연동 예시 코드</h2>
+        <p class="frm_info">아래 예시에서 <code>{{ api_base }}/</code> 부분을 로컬/배포 URL로 바꿔 사용하세요.</p>
+        <div class="tabs">
+            <button type="button" class="tab-btn active" data-tab="curl">cURL</button>
+            <button type="button" class="tab-btn" data-tab="javascript">JavaScript</button>
+            <button type="button" class="tab-btn" data-tab="python">Python</button>
+        </div>
+        <div id="panel_curl" class="tab-panel active">
+            <div class="row-wrap">
+                <strong>토큰 발급</strong>
+                <button type="button" class="copy-btn" data-copy-code="curl_token">복사</button>
+            </div>
+            <div class="code-block" id="curl_token"><pre>curl -X POST "{{ api_base }}/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=아이디&password=비밀번호"</pre></div>
+            <div class="row-wrap" style="margin-top:14px;">
+                <strong>인증 API 호출 (메뉴 목록)</strong>
+                <button type="button" class="copy-btn" data-copy-code="curl_menu">복사</button>
+            </div>
+            <div class="code-block" id="curl_menu"><pre>curl -H "Authorization: Bearer [발급받은_Access_Token]" \
+  "{{ api_base }}/menus"</pre></div>
+        </div>
+        <div id="panel_javascript" class="tab-panel">
+            <div class="code-block" id="js_example"><pre>// 1. 토큰 발급
+const tokenRes = await fetch('{{ api_base }}/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: 'username=아이디&password=비밀번호'
+});
+const { access_token } = await tokenRes.json();
+
+// 2. API 호출
+const res = await fetch('{{ api_base }}/menus', {
+  headers: { 'Authorization': `Bearer ${access_token}` }
+});
+const data = await res.json();</pre></div>
+            <button type="button" class="copy-btn" style="margin-top:8px;" data-copy-code="js_example">전체 복사</button>
+        </div>
+        <div id="panel_python" class="tab-panel">
+            <div class="code-block" id="py_example"><pre>import requests
+
+BASE = "{{ api_base }}"
+
+# 1. 토큰 발급
+r = requests.post(f"{BASE}/token", data={"username": "아이디", "password": "비밀번호"})
+token = r.json()["access_token"]
+
+# 2. API 호출
+resp = requests.get(f"{BASE}/menus", headers={"Authorization": f"Bearer {token}"})
+data = resp.json()</pre></div>
+            <button type="button" class="copy-btn" style="margin-top:8px;" data-copy-code="py_example">전체 복사</button>
+        </div>
+    </section>
+
+    <section id="anc_endpoints">
+        <h2 class="h2_frm">주요 엔드포인트</h2>
+        <ul class="endpoint-list">
+            <li><code>POST /api/v1/token</code> <span>토큰 발급</span></li>
+            <li><code>GET /api/v1/menus</code> <span>메뉴 목록</span></li>
+            <li><code>GET /api/v1/boards/{bo_table}/writes</code> <span>게시판 글 목록</span></li>
+            <li><code>GET /api/v1/boards/{bo_table}/writes/{wr_id}</code> <span>글 상세</span></li>
+            <li><code>GET /api/v1/members/me</code> <span>내 정보 (인증 필요)</span></li>
+            <li><code>GET /api/v1/search</code> <span>검색</span></li>
+        </ul>
+        <p class="frm_info" style="margin-top:12px;">
+            <a href="{{ request.base_url }}docs" target="_blank" rel="noopener">API 문서 (Swagger) <i class="fa-solid fa-up-right-from-square"></i></a> ·
+            <a href="{{ request.base_url }}redoc" target="_blank" rel="noopener">ReDoc <i class="fa-solid fa-up-right-from-square"></i></a>
+        </p>
+    </section>
+</div>
+
+<script>
+(function() {
+    var apiBase = "{{ api_base }}";
+
+    function getText(el) {
+        var id = typeof el === 'string' ? el : (el && el.id);
+        if (!id) return '';
+        var node = document.getElementById(id);
+        return node ? (node.textContent || node.innerText || '').trim() : '';
+    }
+
+    document.querySelectorAll('.copy-btn[data-copy-target]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-copy-target');
+            var text = getText(id);
+            if (text) {
+                navigator.clipboard.writeText(text).then(function() { alert('복사되었습니다.'); });
+            }
+        });
+    });
+
+    document.querySelectorAll('.copy-btn[data-copy-code]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-copy-code');
+            var el = document.getElementById(id);
+            var text = el ? (el.textContent || el.innerText || '').trim() : '';
+            if (text) {
+                navigator.clipboard.writeText(text).then(function() { alert('복사되었습니다.'); });
+            }
+        });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            var panel = document.getElementById('panel_' + this.getAttribute('data-tab'));
+            if (panel) panel.classList.add('active');
+        });
+    });
+
+    document.getElementById('btn_issue_token').addEventListener('click', function() {
+        var mbId = (document.getElementById('token_mb_id').value || '').trim();
+        var password = document.getElementById('token_password').value || '';
+        var errEl = document.getElementById('token_error');
+        var resultEl = document.getElementById('token_result');
+
+        errEl.textContent = '';
+        resultEl.classList.remove('show');
+
+        if (!mbId || !password) {
+            errEl.textContent = '아이디와 비밀번호를 입력하세요.';
+            return;
+        }
+
+        var formBody = 'username=' + encodeURIComponent(mbId) + '&password=' + encodeURIComponent(password);
+        fetch(apiBase + '/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formBody
+        }).then(function(r) {
+            return r.json().then(function(data) {
+                if (!r.ok) {
+                    errEl.textContent = data.detail || '토큰 발급에 실패했습니다.';
+                    return;
+                }
+                document.getElementById('display_access_token').textContent = data.access_token || '';
+                document.getElementById('display_refresh_token').textContent = data.refresh_token || '';
+                resultEl.classList.add('show');
+            });
+        }).catch(function() {
+            errEl.textContent = '요청 중 오류가 발생했습니다.';
+        });
+    });
+
+    document.querySelectorAll('.btn_copy_token').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var type = this.getAttribute('data-token-type');
+            var id = type === 'access' ? 'display_access_token' : 'display_refresh_token';
+            var text = getText(id);
+            if (text) navigator.clipboard.writeText(text).then(function() { alert('복사되었습니다.'); });
+        });
+    });
+})();
+</script>
+{% endblock content %}
