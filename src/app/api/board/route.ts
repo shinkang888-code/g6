@@ -3,18 +3,20 @@
  */
 
 import { NextResponse } from "next/server";
-import { isBoardApiConfigured } from "@/lib/boardBridge";
+import { getBoardBridgeStatus, isBoardApiConfigured } from "@/lib/boardBridge";
 import { listBoards } from "@/lib/boardService";
+import { BOARD_LIST } from "@/lib/boardConfig";
 import { getSession } from "@/lib/authSession";
 import { getTenantManagementNumber } from "@/lib/boardApiContext";
 
 export async function GET() {
   try {
-    const configured = await isBoardApiConfigured();
+    const status = await getBoardBridgeStatus();
     const session = await getSession();
     const mgmt = getTenantManagementNumber(session);
+    const configured = await isBoardApiConfigured();
 
-    if (configured) {
+    if (status.nativeBoard) {
       const boards = await listBoards(mgmt);
       return NextResponse.json({
         success: true,
@@ -26,16 +28,28 @@ export async function GET() {
           isSystem: b.isSystem,
         })),
         nativeBoard: true,
-        g6Connected: false,
+        g6Connected: status.g6Connected,
+        bridgePrefer: status.prefer,
+      });
+    }
+
+    if (status.g6Connected) {
+      return NextResponse.json({
+        success: true,
+        data: BOARD_LIST,
+        nativeBoard: false,
+        g6Connected: true,
+        bridgePrefer: status.prefer,
       });
     }
 
     return NextResponse.json({
       success: true,
-      data: [],
+      data: configured ? BOARD_LIST : [],
       nativeBoard: false,
       g6Connected: false,
-      hint: "native_boards 마이그레이션을 적용해 주세요.",
+      bridgePrefer: status.prefer,
+      hint: "Supabase 게시판 마이그레이션 또는 G6(NEXT_PUBLIC_GNUBOARD_API_URL) 설정이 필요합니다.",
     });
   } catch (e) {
     return NextResponse.json(

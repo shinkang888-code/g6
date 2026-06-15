@@ -23,10 +23,20 @@ if (!fs.existsSync(g6Dir)) {
   process.exit(1);
 }
 
-run("git", ["remote", "set-url", "origin", forkUrl], g6Dir);
-run("git", ["fetch", "origin"], g6Dir);
-run("git", ["checkout", "master"], g6Dir);
-run("git", ["pull", "origin", "master"], g6Dir);
+const g6GitDir = path.join(g6Dir, ".git");
+const isSubmodule = fs.existsSync(g6GitDir);
+
+if (isSubmodule) {
+  run("git", ["remote", "set-url", "origin", forkUrl], g6Dir);
+  run("git", ["fetch", "origin"], g6Dir);
+  run("git", ["checkout", "master"], g6Dir);
+  run("git", ["pull", "origin", "master"], g6Dir);
+} else if (fs.existsSync(path.join(g6Dir, "main.py"))) {
+  console.log("g6/ — 내장 복사본 사용 (submodule 아님, git 동기화 생략)");
+} else {
+  console.error("g6/ 에 main.py가 없습니다. g6 소스를 확인하세요.");
+  process.exit(1);
+}
 
 const venvDir = path.join(g6Dir, ".venv");
 const py = process.platform === "win32"

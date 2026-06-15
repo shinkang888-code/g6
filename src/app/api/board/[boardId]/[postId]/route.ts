@@ -16,8 +16,8 @@ import { requireAuthenticatedSession } from "@/lib/adminSession";
 
 type Params = { params: Promise<{ boardId: string; postId: string }> };
 
-function useInternalNotices(boardId: string): boolean {
-  return boardId === NOTICE_BOARD_ID && !isBoardApiConfigured();
+async function useInternalNotices(boardId: string): Promise<boolean> {
+  return boardId === NOTICE_BOARD_ID && !(await isBoardApiConfigured());
 }
 
 export async function GET(_request: NextRequest, { params }: Params) {
@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest, { params }: Params) {
     return NextResponse.json({ success: false, error: "잘못된 게시물 ID입니다." }, { status: 400 });
   }
 
-  if (useInternalNotices(boardId)) {
+  if (await useInternalNotices(boardId)) {
     try {
       const item = await getNoticeByNumId(id);
       if (!item) {
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     return NextResponse.json({ success: false, error: "잘못된 요청 본문입니다." }, { status: 400 });
   }
 
-  if (useInternalNotices(boardId)) {
+  if (await useInternalNotices(boardId)) {
     try {
       const updated = await updateNotice(id, {
         title: body.wr_subject,
@@ -116,7 +116,7 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
     return NextResponse.json({ success: false, error: "잘못된 게시물 ID입니다." }, { status: 400 });
   }
 
-  if (useInternalNotices(boardId)) {
+  if (await useInternalNotices(boardId)) {
     try {
       const ok = await softDeleteNotice(id);
       if (!ok) {

@@ -34,6 +34,28 @@ const G6_ROOT = (env.NEXT_PUBLIC_GNUBOARD_API_URL ?? "http://localhost:8000")
 
 const results = [];
 
+function parseCookie(res) {
+  const raw = res.headers.getSetCookie?.() ?? [];
+  const lines = raw.length ? raw : [res.headers.get("set-cookie")].filter(Boolean);
+  return lines.map((c) => String(c).split(";")[0]).join("; ");
+}
+
+async function login() {
+  const loginId = env.LAWBOARD_ADMIN_LOGIN_ID || "lawboardadmin";
+  const password = env.LAWBOARD_ADMIN_PASSWORD || "LawBoard2026!";
+  const managementNumber = env.LAWBOARD_ADMIN_MN || "10000";
+  const r = await fetch(`${LAWYGO}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ loginId, password, managementNumber }),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || `login status ${r.status}`);
+  const cookie = parseCookie(r);
+  if (!cookie) throw new Error("세션 쿠키 없음");
+  return cookie;
+}
+
 async function check(name, fn) {
   try {
     await fn();
@@ -49,6 +71,9 @@ async function check(name, fn) {
 async function main() {
   console.log(`LawyGo: ${LAWYGO}`);
   console.log(`G6: ${G6_ROOT}\n`);
+
+  const cookie = await login();
+  const authHeaders = { Cookie: cookie, "Content-Type": "application/json" };
 
   await check("G6 서버 응답", async () => {
     const r = await fetch(G6_ROOT, { redirect: "follow" });
@@ -73,7 +98,7 @@ async function main() {
   await check(`게시물 작성 (${boardId})`, async () => {
     const r = await fetch(`${LAWYGO}/api/board/${boardId}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders,
       body: JSON.stringify({
         wr_subject: `[테스트] G6 연동 ${new Date().toISOString()}`,
         wr_content: "LawyGo 브릿지 자동 테스트",
@@ -82,7 +107,10 @@ async function main() {
     });
     const j = await r.json();
     if (!j.success || !j.data?.id) throw new Error(JSON.stringify(j));
-    if (j.source !== "g6") throw new Error(`source=${j.source}, g6 기대`);
+    if (j.source !== "g6") {
+      const prefer = env.BOARD_BRIDGE_PREFER ?? "hybrid";
+      throw new Error(`source=${j.source}, g6 기대 (BOARD_BRIDGE_PREFER=${prefer})`);
+    }
     postId = j.data.id;
   });
 
@@ -102,7 +130,10 @@ async function main() {
     });
 
     await check(`게시물 삭제 (id=${postId})`, async () => {
-      const r = await fetch(`${LAWYGO}/api/board/${boardId}/${postId}`, { method: "DELETE" });
+      const r = await fetch(`${LAWYGO}/api/board/${boardId}/${postId}`, {
+        method: "DELETE",
+        headers: authHeaders,
+      });
       const j = await r.json();
       if (!j.success) throw new Error(JSON.stringify(j));
     });

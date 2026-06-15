@@ -62,6 +62,7 @@ export default function BoardListPage() {
   const [boards, setBoards] = useState<StoredBoardItem[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [nativeBoard, setNativeBoard] = useState<boolean | null>(null);
+  const [g6Connected, setG6Connected] = useState<boolean | null>(null);
   const [geminiConfigured, setGeminiConfigured] = useState<boolean | null>(null);
   const [openaiConfigured, setOpenaiConfigured] = useState<boolean | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
@@ -99,8 +100,14 @@ export default function BoardListPage() {
   useEffect(() => {
     fetch("/api/board")
       .then((res) => res.json())
-      .then((data) => setNativeBoard(data.nativeBoard ?? false))
-      .catch(() => setNativeBoard(false));
+      .then((data) => {
+        setNativeBoard(data.nativeBoard ?? false);
+        setG6Connected(data.g6Connected ?? false);
+      })
+      .catch(() => {
+        setNativeBoard(false);
+        setG6Connected(false);
+      });
   }, []);
   useEffect(() => {
     fetch("/api/ai/gemini")
@@ -230,6 +237,17 @@ export default function BoardListPage() {
               >
                 {nativeBoard ? <Wifi size={14} /> : <WifiOff size={14} />}
                 {nativeBoard ? "Supabase 게시판" : "게시판 DB 미준비"}
+              </div>
+            )}
+            {g6Connected !== null && (
+              <div
+                className={cn(
+                  "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium",
+                  g6Connected ? "bg-indigo-50 text-indigo-700" : "bg-slate-100 text-text-muted"
+                )}
+              >
+                {g6Connected ? <Wifi size={14} /> : <WifiOff size={14} />}
+                {g6Connected ? "G6(그누보드6) 연동" : "G6 미연동"}
               </div>
             )}
             {geminiConfigured !== null && (

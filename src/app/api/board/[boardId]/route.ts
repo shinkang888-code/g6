@@ -15,8 +15,8 @@ import { requireAuthenticatedSession } from "@/lib/adminSession";
 
 type Params = { params: Promise<{ boardId: string }> };
 
-function useInternalNotices(boardId: string): boolean {
-  return boardId === NOTICE_BOARD_ID && !isBoardApiConfigured();
+async function useInternalNotices(boardId: string): Promise<boolean> {
+  return boardId === NOTICE_BOARD_ID && !(await isBoardApiConfigured());
 }
 
 export async function GET(request: NextRequest, { params }: Params) {
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, { params }: Params) {
   const search_field = searchParams.get("search_field") ?? undefined;
   const category = searchParams.get("category") ?? undefined;
 
-  if (useInternalNotices(boardId)) {
+  if (await useInternalNotices(boardId)) {
     try {
       const { items, total } = await listNotices({
         q: search_keyword,
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({ success: false, error: "잘못된 요청 본문입니다." }, { status: 400 });
   }
 
-  if (useInternalNotices(boardId)) {
+  if (await useInternalNotices(boardId)) {
     try {
       if (!body.wr_subject?.trim()) {
         return NextResponse.json({ success: false, error: "제목을 입력하세요." }, { status: 400 });

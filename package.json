@@ -58,7 +58,9 @@
     "test:lawboard": "node scripts/test-lawboard-phase1.mjs && node scripts/test-lawboard-phase2-4.mjs",
     "test:lawboard-e2e": "node scripts/test-lawboard-e2e.mjs",
     "seed:lawboard-admin": "node scripts/seed-lawboard-admin.mjs",
-    "setup:lawboard-vercel-env": "node scripts/setup-lawboard-vercel-env.mjs"
+    "setup:lawboard-vercel-env": "node scripts/setup-lawboard-vercel-env.mjs",
+    "setup:g6-vercel-env": "node scripts/setup-g6-vercel-env.mjs",
+    "merge:env": "node scripts/merge-lawboard-env.mjs"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
