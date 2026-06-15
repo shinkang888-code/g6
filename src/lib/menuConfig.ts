@@ -22,6 +22,7 @@ export const LNB_MENU: MenuItem[] = [
   { id: "board", label: "게시판", href: "/board", icon: "LayoutList", lawtopModule: "게시판" },
   { id: "calendar", label: "기일 달력", href: "/calendar", icon: "Calendar", lawtopModule: "기일/일정" },
   { id: "consultation", label: "상담관리", href: "/consultation", icon: "MessageSquare", lawtopModule: "상담/회의실" },
+  { id: "mail", label: "메일", href: "/mail", icon: "Mail", lawtopModule: "LawTopMail" },
   { id: "clients", label: "고객관리", href: "/clients", icon: "UserCircle", lawtopModule: "고객관리" },
   { id: "messenger", label: "메신저", href: "/messenger", icon: "Send", lawtopModule: "메신저" },
   { id: "internal-messenger", label: "사내 메신저", href: "/internal-messenger", icon: "MessageCircle", lawtopModule: "사내메신저" },
@@ -46,6 +47,7 @@ export const MOBILE_MAIN_MENU: MenuItem[] = [
 export const MOBILE_MORE_MENU: MenuItem[] = [
   { id: "calendar", label: "기일 달력", href: "/calendar", icon: "CalendarDays" },
   { id: "consultation", label: "상담관리", href: "/consultation", icon: "MessageSquare" },
+  { id: "mail", label: "메일", href: "/mail", icon: "Mail" },
   { id: "clients", label: "고객관리", href: "/clients", icon: "UserCircle" },
   { id: "messenger", label: "메신저", href: "/messenger", icon: "Send" },
   { id: "internal-messenger", label: "사내 메신저", href: "/internal-messenger", icon: "MessageCircle" },

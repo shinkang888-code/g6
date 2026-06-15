@@ -51,7 +51,7 @@ function fromRow(row: Record<string, unknown>): ConsultationItem {
     status: meta.status ?? "scheduled",
     caseId: meta.caseId,
     caseNumber: meta.caseNumber,
-    notes: meta.notes ?? (row.content ? String(row.content) : undefined),
+    notes: meta.notes ?? (row.notes ? String(row.notes) : undefined),
     createdAt: String(row.created_at),
     updatedAt: String(row.updated_at),
   };
@@ -131,7 +131,7 @@ export async function createConsultation(
     .insert({
       client_name: clientName,
       consultation_date: input.consultationDate,
-      content: input.notes ?? input.purpose ?? "",
+      notes: input.notes ?? input.purpose ?? "",
       meta: toMeta(input),
       updated_at: now,
     })
@@ -159,7 +159,7 @@ export async function updateConsultation(
     .update({
       client_name: merged.clientNames?.[0] ?? merged.clientName,
       consultation_date: merged.consultationDate,
-      content: merged.notes ?? merged.purpose ?? "",
+      notes: merged.notes ?? merged.purpose ?? "",
       meta: toMeta(merged),
       updated_at: now,
     })

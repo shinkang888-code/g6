@@ -61,7 +61,7 @@ export default function BoardListPage() {
   const [activeTab, setActiveTab] = useState<BoardTab>("boards");
   const [boards, setBoards] = useState<StoredBoardItem[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [g6Connected, setG6Connected] = useState<boolean | null>(null);
+  const [nativeBoard, setNativeBoard] = useState<boolean | null>(null);
   const [geminiConfigured, setGeminiConfigured] = useState<boolean | null>(null);
   const [openaiConfigured, setOpenaiConfigured] = useState<boolean | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
@@ -99,8 +99,8 @@ export default function BoardListPage() {
   useEffect(() => {
     fetch("/api/board")
       .then((res) => res.json())
-      .then((data) => setG6Connected(data.g6Connected ?? false))
-      .catch(() => setG6Connected(false));
+      .then((data) => setNativeBoard(data.nativeBoard ?? false))
+      .catch(() => setNativeBoard(false));
   }, []);
   useEffect(() => {
     fetch("/api/ai/gemini")
@@ -193,7 +193,7 @@ export default function BoardListPage() {
               게시판
             </h1>
             <p className="text-sm text-text-muted mt-0.5">
-              그누보드6(G6) 연동 게시판, AI문서엔진(Lawygo), 결재관리를 이용할 수 있습니다.
+              Supabase 네이티브 게시판, AI문서엔진(Lawygo), 결재관리를 이용할 수 있습니다.
             </p>
           </div>
           <div className="flex rounded-lg border border-slate-200 overflow-hidden bg-slate-50">
@@ -221,15 +221,15 @@ export default function BoardListPage() {
             </button>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            {g6Connected !== null && (
+            {nativeBoard !== null && (
               <div
                 className={cn(
                   "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium",
-                  g6Connected ? "bg-success-50 text-success-700" : "bg-slate-100 text-text-muted"
+                  nativeBoard ? "bg-success-50 text-success-700" : "bg-slate-100 text-text-muted"
                 )}
               >
-                {g6Connected ? <Wifi size={14} /> : <WifiOff size={14} />}
-                {g6Connected ? "G6 연동됨" : "G6 미연동"}
+                {nativeBoard ? <Wifi size={14} /> : <WifiOff size={14} />}
+                {nativeBoard ? "Supabase 게시판" : "게시판 DB 미준비"}
               </div>
             )}
             {geminiConfigured !== null && (

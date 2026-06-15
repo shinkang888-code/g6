@@ -28,6 +28,7 @@ import {
   Send,
   UserCircle,
   MessageCircle,
+  Mail,
 } from "lucide-react";
 import { getMenuForRoles } from "@/lib/menuConfig";
 import { useMenus } from "@/hooks/useMenus";
@@ -54,6 +55,7 @@ const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   Send,
   UserCircle,
   MessageCircle,
+  Mail,
 };
 
 const FALLBACK_USER = { name: "사용자", role: "직원", permissions: ["직원"] };

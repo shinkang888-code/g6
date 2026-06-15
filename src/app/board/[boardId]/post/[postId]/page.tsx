@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -29,6 +29,48 @@ export default function BoardPostPage({
   const [comments, setComments] = useState<BoardComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [commentText, setCommentText] = useState("");
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const [commentError, setCommentError] = useState<string | null>(null);
+
+  const loadComments = useCallback(() => {
+    if (!boardId || !postId) return;
+    fetch(`/api/board/${boardId}/${postId}/comments`)
+      .then((r) => r.json())
+      .then((commentsRes) => {
+        if (commentsRes.success && Array.isArray(commentsRes.data)) setComments(commentsRes.data);
+      })
+      .catch(() => {});
+  }, [boardId, postId]);
+
+  const handleSubmitComment = async () => {
+    if (!boardId || !postId || !commentText.trim()) return;
+    setSubmittingComment(true);
+    setCommentError(null);
+    try {
+      const res = await fetch(`/api/board/${boardId}/${postId}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ co_content: commentText.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setCommentError(data.error ?? "댓글 작성에 실패했습니다.");
+        return;
+      }
+      setCommentText("");
+      loadComments();
+      if (data.data) {
+        setComments((prev) => [...prev, data.data]);
+        setPost((p) => (p ? { ...p, commentCount: p.commentCount + 1 } : p));
+      }
+    } catch {
+      setCommentError("연결에 실패했습니다.");
+    } finally {
+      setSubmittingComment(false);
+    }
+  };
 
   useEffect(() => {
     params.then((p) => {
@@ -156,6 +198,30 @@ export default function BoardPostPage({
             </ul>
           </div>
         )}
+
+        <div className="rounded-2xl border border-slate-100 bg-white shadow-card p-5 space-y-3">
+          <label className="text-sm font-semibold text-slate-800 flex items-center gap-2">
+            <MessageSquare size={16} className="text-primary-600" />
+            댓글 작성
+          </label>
+          <textarea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            rows={3}
+            placeholder="댓글을 입력하세요"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+          />
+          {commentError && <p className="text-xs text-warning-600">{commentError}</p>}
+          <div className="flex justify-end">
+            <Button
+              size="sm"
+              onClick={handleSubmitComment}
+              disabled={submittingComment || !commentText.trim()}
+            >
+              {submittingComment ? "등록 중…" : "댓글 등록"}
+            </Button>
+          </div>
+        </div>
 
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Link

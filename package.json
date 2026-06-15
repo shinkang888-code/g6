@@ -53,7 +53,12 @@
     "test:g6": "node scripts/test-g6-bridge.mjs",
     "debug:court-sync": "node scripts/debug-court-sync.mjs",
     "retest:sync": "tsx scripts/retest-one-sync.ts",
-    "test:lawboard-phase1": "node scripts/test-lawboard-phase1.mjs"
+    "test:lawboard-phase1": "node scripts/test-lawboard-phase1.mjs",
+    "test:lawboard-phase2-4": "node scripts/test-lawboard-phase2-4.mjs",
+    "test:lawboard": "node scripts/test-lawboard-phase1.mjs && node scripts/test-lawboard-phase2-4.mjs",
+    "test:lawboard-e2e": "node scripts/test-lawboard-e2e.mjs",
+    "seed:lawboard-admin": "node scripts/seed-lawboard-admin.mjs",
+    "setup:lawboard-vercel-env": "node scripts/setup-lawboard-vercel-env.mjs"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
