@@ -1,6 +1,6 @@
 # LawBoard
 
-**LawyGo 개발용 서브프로젝트** — LawTop GL의 **게시판·공지·상담** 기능을 웹으로 충실히 구현·검증합니다.
+**LawBoard 개발용 서브프로젝트** — LawTop GL의 **게시판·공지·상담** 기능을 웹으로 충실히 구현·검증합니다.
 
 > 원본 LawTop GL 바이너리는 [lawtop](https://github.com/shinkang888-code/lawtop) 리포에서 보호하며,  
 > 본 프로젝트는 [lawygo](https://github.com/shinkang888-code/lawygo) 코드베이스를 기반으로 합니다.

@@ -1,7 +1,7 @@
 export const SUBSCRIPTION_PLANS = {
   standard_monthly: {
     id: "standard_monthly",
-    name: "LawyGo 표준 (월간)",
+    name: "LawBoard 표준 (월간)",
     amountKrw: Number(process.env.SUBSCRIPTION_MONTHLY_PRICE_KRW ?? "99000"),
     interval: "month" as const,
     trialDays: Number(process.env.SUBSCRIPTION_TRIAL_DAYS ?? "14"),

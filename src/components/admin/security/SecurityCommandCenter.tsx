@@ -31,7 +31,7 @@ export default function SecurityCommandCenter() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
           <Shield size={26} className="text-primary-600" />
-          LawyGo 보안 관제 센터 (LSCC)
+          LawBoard 보안 관제 센터 (LSCC)
         </h1>
         <p className="text-sm text-text-muted mt-1">
           관리자 전용 — 전체 서버 접속·보안 이벤트 SOC 관제 및 fireauto 8카테고리 코드 감사

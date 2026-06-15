@@ -58,7 +58,7 @@ export const trialSampleStaff: StaffMember[] = [
     name: "신강",
     role: "관리자",
     department: "체험",
-    email: "trial@lawygo.app",
+    email: "trial@lawboard.app",
     phone: "010-0000-1000",
     level: 5,
     loginId: "trial-admin",

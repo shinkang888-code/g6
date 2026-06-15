@@ -18,7 +18,7 @@ export function WwwNav() {
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0A1628] to-[#1e3a5f] shadow-lg shadow-slate-900/10 transition-transform group-hover:scale-105">
             <Scale size={17} className="text-white" />
           </span>
-          <span className="text-lg font-bold tracking-tight text-[#0A1628]">LawyGo</span>
+          <span className="text-lg font-bold tracking-tight text-[#0A1628]">LawBoard</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

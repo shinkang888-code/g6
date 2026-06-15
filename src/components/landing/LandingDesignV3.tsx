@@ -37,7 +37,7 @@ export function LandingDesignV3() {
             <h1 className="mt-4 text-3xl font-bold leading-tight text-[#0A1628] sm:text-5xl">
               송무 관리의 새 기준,
               <br />
-              LawyGo
+              LawBoard
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-sm text-slate-600 sm:text-base">
               사건 수임 이후의 모든 업무 — 기일, 서류, 결재, 고객 소통 — 을
@@ -130,7 +130,7 @@ export function LandingDesignV3() {
         <section className="relative overflow-hidden bg-[#0A1628] py-20 text-white">
           <div className="pointer-events-none absolute -right-20 top-0 h-64 w-64 rounded-full bg-sky-500/20 blur-3xl" />
           <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
-            <h2 className="text-2xl font-bold sm:text-4xl">송무 운영, LawyGo로 단순하게</h2>
+            <h2 className="text-2xl font-bold sm:text-4xl">송무 운영, LawBoard로 단순하게</h2>
             <p className="mt-4 text-sm text-slate-300">
               10초 만에 가입하고, 분산된 사건 관리에서 벗어나세요.
             </p>
@@ -147,7 +147,7 @@ export function LandingDesignV3() {
       </main>
 
       <footer className="border-t border-slate-100 py-8 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} LawyGo · 법무법인을 위한 송무관리 시스템
+        © {new Date().getFullYear()} LawBoard · 법무법인을 위한 송무관리 시스템
       </footer>
     </div>
   );

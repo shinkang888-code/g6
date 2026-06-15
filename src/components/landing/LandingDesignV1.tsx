@@ -20,7 +20,7 @@ export function LandingDesignV1() {
             시작입니다
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-500 sm:text-base">
-            이제 LawyGo에게 맡겨보세요. 진행 중인 모든 사건의 기일·불변기한·결재·자료를
+            이제 LawBoard에게 맡겨보세요. 진행 중인 모든 사건의 기일·불변기한·결재·자료를
             24시간 놓치지 않고 송무 관리 시스템이 확인하고 알려드립니다.
           </p>
 
@@ -38,7 +38,7 @@ export function LandingDesignV1() {
         </section>
 
         <section id="trust" className="border-t border-slate-100 py-14">
-          <p className="text-center text-sm text-slate-500">다수의 로펌 · 법무팀이 선택한 LawyGo</p>
+          <p className="text-center text-sm text-slate-500">다수의 로펌 · 법무팀이 선택한 LawBoard</p>
           <div className="mx-auto mt-8 flex max-w-4xl flex-wrap items-center justify-center gap-x-10 gap-y-4 px-6">
             {LANDING_TRUST_LOGOS.map((name) => (
               <span key={name} className="text-sm font-semibold tracking-wide text-slate-300">
@@ -85,7 +85,7 @@ export function LandingDesignV1() {
         </section>
 
         <section className="bg-[#0A1628] py-20 text-center text-white">
-          <h2 className="text-2xl font-bold sm:text-3xl">송무 관리, LawyGo가 대신 챙깁니다</h2>
+          <h2 className="text-2xl font-bold sm:text-3xl">송무 관리, LawBoard가 대신 챙깁니다</h2>
           <p className="mx-auto mt-4 max-w-xl text-sm text-slate-300">
             사건 등록부터 기일·결재·자료실까지. 복잡한 송무 운영을 한 플랫폼에서 시작하세요.
           </p>
@@ -93,7 +93,7 @@ export function LandingDesignV1() {
             href="/login/signup"
             className="mt-8 inline-flex rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#0A1628] hover:bg-sky-50"
           >
-            LawyGo 무료로 시작하기
+            LawBoard 무료로 시작하기
           </Link>
         </section>
       </main>

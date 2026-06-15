@@ -183,7 +183,7 @@ export async function createPost(
   const body: Record<string, unknown> = {
     wr_subject: data.wr_subject,
     wr_content: data.wr_content ?? "",
-    wr_name: data.wr_name ?? "LawyGo",
+    wr_name: data.wr_name ?? "LawBoard",
     html: "html1",
   };
   if (data.wr_1) body.wr_1 = data.wr_1;
@@ -245,7 +245,7 @@ export async function createComment(
   boardId: string,
   postId: number,
   content: string,
-  authorName = "LawyGo"
+  authorName = "LawBoard"
 ): Promise<GnuboardResponse<GnuboardComment>> {
   await gnuFetchRaw<{ result?: string }>(`${boardWritesPath(boardId)}/${postId}/comments`, {
     method: "POST",

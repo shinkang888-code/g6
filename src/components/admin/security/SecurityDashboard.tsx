@@ -88,7 +88,7 @@ export default function SecurityDashboard({ embedded = false }: { embedded?: boo
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `lawygo-security-events-${Date.now()}.csv`;
+    a.download = `lawboard-security-events-${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

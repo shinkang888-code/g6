@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "LawyGo — 법무 관리",
-    short_name: "LawyGo",
+    name: "LawBoard — 법무 관리",
+    short_name: "LawBoard",
     description: "법무법인을 위한 사건·기일·고객 관리 플랫폼",
     start_url: "/",
     scope: "/",

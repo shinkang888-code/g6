@@ -205,7 +205,7 @@ export default function ScourtSearchPage() {
           1) <strong>나의 사건검색</strong> 탭에서 조회를 완료합니다. 2) 이 화면으로 돌아와{" "}
           <strong>조회완료·기일연동</strong>을 누르면 봇이 조회 결과를 파싱해 사건 기일에 반영합니다.
           기일연동 시 봇이 <strong>사건검색 결과 저장</strong>을 자동 체크하여 PC와 동일한 조회 데이터를
-          확보합니다. (대법원 사이트는 보안상 LawyGo로 직접 전달되지 않아 이 보조 화면이 필요합니다.)
+          확보합니다. (대법원 사이트는 보안상 LawBoard로 직접 전달되지 않아 이 보조 화면이 필요합니다.)
         </p>
 
         {caseId ? (

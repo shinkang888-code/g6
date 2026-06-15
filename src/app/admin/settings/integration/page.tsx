@@ -153,7 +153,7 @@ function IntegrationSettingsContent() {
             <ol className="list-decimal list-inside space-y-0.5 text-slate-600">
               <li>루트에서 <code className="bg-white/80 px-1 rounded">npm run setup:g6</code> (포크 리포 submodule + Python 의존성)</li>
               <li>G6 실행: <code className="bg-white/80 px-1 rounded">npm run dev:g6</code> → <code className="bg-white/80 px-1 rounded">http://localhost:8000</code></li>
-              <li>LawyGo 실행: <code className="bg-white/80 px-1 rounded">npm run dev</code> → <code className="bg-white/80 px-1 rounded">http://localhost:3000</code></li>
+              <li>LawBoard 실행: <code className="bg-white/80 px-1 rounded">npm run dev</code> → <code className="bg-white/80 px-1 rounded">http://localhost:3000</code></li>
               <li><code className="bg-white/80 px-1 rounded">.env.local</code>에 <code className="bg-white/80 px-1 rounded">NEXT_PUBLIC_GNUBOARD_API_URL=http://localhost:8000</code> 및 G6 관리자 계정(<code className="bg-white/80 px-1 rounded">GNUBOARD_API_USERNAME</code>/<code className="bg-white/80 px-1 rounded">GNUBOARD_API_PASSWORD</code>) 설정</li>
             </ol>
             <p className="text-slate-500 pt-0.5">자세한 내용: <code className="bg-white/80 px-1 rounded">docs/g6-install.md</code> · 포크: shinkang888-code/g6</p>

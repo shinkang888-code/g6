@@ -40,7 +40,7 @@ export default function LandingShowcasePage() {
       <div className="sticky top-0 z-[60] border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
-            <p className="text-xs font-semibold text-primary-600">LawyGo 랜딩 디자인 시안</p>
+            <p className="text-xs font-semibold text-primary-600">LawBoard 랜딩 디자인 시안</p>
             <p className="text-sm text-slate-500">Allibee 참조 · 송무관리 프로그램 소개 · 3안 비교</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">

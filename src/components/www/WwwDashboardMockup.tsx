@@ -42,7 +42,7 @@ export function WwwDashboardMockup() {
           </div>
           <div className="mx-auto flex items-center gap-2 rounded-lg bg-white px-4 py-1.5 text-xs text-slate-400 shadow-sm ring-1 ring-slate-100">
             <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            lawygo.app — 업무 대시보드
+            lawboard.app — 업무 대시보드
           </div>
         </div>
 

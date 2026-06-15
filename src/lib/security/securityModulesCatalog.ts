@@ -23,7 +23,7 @@ export const LAWYGO_SECURITY_MODULES: SecurityModuleInfo[] = [
     name: "Rate Limit Guard",
     shortName: "RLG",
     description: "로그인·AI·메신저·업로드 등 민감 API 25+ 엔드포인트 분당 요청 제한",
-    source: "LawyGo rateLimitGuard",
+    source: "LawBoard rateLimitGuard",
   },
   {
     id: "threat-analyzer",
@@ -51,7 +51,7 @@ export const LAWYGO_SECURITY_MODULES: SecurityModuleInfo[] = [
     name: "세션·권한 분리",
     shortName: "AUTH",
     description: "HMAC 세션 쿠키, 관리자·테넌트 격리, RLS 기반 Supabase 데이터 보호",
-    source: "LawyGo authSession",
+    source: "LawBoard authSession",
   },
 ];
 

@@ -114,7 +114,7 @@ export function Sidebar() {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <div className="text-white font-bold text-lg leading-tight tracking-tight">LawyGo</div>
+            <div className="text-white font-bold text-lg leading-tight tracking-tight">LawBoard</div>
             <div className="text-slate-400 text-xs">법무 관리 시스템</div>
           </div>
         )}

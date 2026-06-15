@@ -103,7 +103,7 @@ export default function CalendarManagePage() {
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = `${dateParam} 기일 · LawyGo`;
+      document.title = `${dateParam} 기일 · LawBoard`;
     }
   }, [dateParam]);
 

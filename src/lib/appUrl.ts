@@ -6,7 +6,7 @@ export function getAppBaseUrl(): string {
   if (configured) return configured.replace(/\/$/, "");
 
   if (process.env.NEXT_PUBLIC_SITE_MODE === "marketing") {
-    return "https://lawygo.vercel.app";
+    return "https://lawboard.vercel.app";
   }
 
   if (process.env.VERCEL_URL) {

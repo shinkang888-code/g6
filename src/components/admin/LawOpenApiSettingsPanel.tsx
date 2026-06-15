@@ -274,7 +274,7 @@ export function LawOpenApiSettingsPanel({ showBackLink = true }: Props) {
               에서 Open API 이용 신청
             </li>
             <li>발급된 OC 값(신청 이메일 @ 앞 ID)을 아래에 입력</li>
-            <li>Vercel 프로젝트 IP/도메인(lawygo.vercel.app)을 API 신청서에 등록</li>
+            <li>Vercel 프로젝트 IP/도메인(lawboard.vercel.app)을 API 신청서에 등록</li>
             <li>
               로컬 <code className="bg-white px-1 rounded">.env.local</code>에 Vercel 토큰 저장 → OC 저장 → 「Vercel에 반영」
             </li>

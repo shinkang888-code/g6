@@ -10,7 +10,7 @@ export function WwwTestimonials() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-[#0A1628]">고객 성공 사례</h2>
-          <p className="mt-3 text-slate-500">실제 송무 현장에서 LawyGo를 사용하는 이야기</p>
+          <p className="mt-3 text-slate-500">실제 송무 현장에서 LawBoard를 사용하는 이야기</p>
         </div>
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           {WWW_TESTIMONIALS.map((t, i) => (

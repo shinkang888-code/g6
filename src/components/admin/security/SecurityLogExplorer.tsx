@@ -172,7 +172,7 @@ export default function SecurityLogExplorer({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `lawygo-security-${Date.now()}.csv`;
+    a.download = `lawboard-security-${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export const DEFAULT_TAB_TITLE = "LawyGo - 법무 관리 시스템";
+export const DEFAULT_TAB_TITLE = "LawBoard - 법무 관리 시스템";
 
 /** 예: "전준범 · 사건수정", "상담관리" */
 export function formatTaskTabTitle(task: string, context?: string): string {

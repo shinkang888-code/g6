@@ -69,7 +69,7 @@ export async function getDriveClient() {
   return google.drive({ version: "v3", auth: authClient });
 }
 
-const ROOT_NAME = "LawyGo";
+const ROOT_NAME = "LawBoard";
 
 /** 루트 폴더 ID 조회/생성 */
 export async function getOrCreateRootFolder(
@@ -163,7 +163,7 @@ export async function uploadFile(
   if (!settings.rootFolderId?.trim()) {
     throw new DriveUploadError(
       "STORAGE_QUOTA_SETUP",
-      "Google Drive 업로드용 루트 폴더가 설정되지 않았습니다. 본인 Drive에 LawyGo 폴더를 만들고 서비스 계정을 편집자로 공유한 뒤, 관리자 > Google Drive 설정에서 루트 폴더 ID를 입력하세요."
+      "Google Drive 업로드용 루트 폴더가 설정되지 않았습니다. 본인 Drive에 LawBoard 폴더를 만들고 서비스 계정을 편집자로 공유한 뒤, 관리자 > Google Drive 설정에서 루트 폴더 ID를 입력하세요."
     );
   }
 
@@ -197,7 +197,7 @@ export async function uploadFile(
     if (isStorageQuotaError(msg)) {
       throw new DriveUploadError(
         "STORAGE_QUOTA",
-        "서비스 계정 Drive에는 저장 공간이 없습니다. shinkang888@gmail.com Google Drive에 LawyGo 폴더를 공유하고, 관리자 > Google Drive에서 「업로드 권한 연결(OAuth)」을 완료하세요."
+        "서비스 계정 Drive에는 저장 공간이 없습니다. shinkang888@gmail.com Google Drive에 LawBoard 폴더를 공유하고, 관리자 > Google Drive에서 「업로드 권한 연결(OAuth)」을 완료하세요."
       );
     }
     throw e;

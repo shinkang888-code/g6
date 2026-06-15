@@ -11,7 +11,7 @@ export function WwwPricingPage() {
     <main>
       <section className="border-b border-slate-100 bg-gradient-to-b from-sky-50/50 to-white py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
-          <h1 className="text-4xl font-bold text-[#0A1628]">LawyGo 요금 안내</h1>
+          <h1 className="text-4xl font-bold text-[#0A1628]">LawBoard 요금 안내</h1>
           <p className="mx-auto mt-4 max-w-xl text-slate-600">
             로펌 규모와 필요한 모듈에 맞는 플랜을 선택하세요. Enterprise는 맞춤 견적을 제공합니다.
           </p>

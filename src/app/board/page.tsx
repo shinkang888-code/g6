@@ -193,7 +193,7 @@ export default function BoardListPage() {
               게시판
             </h1>
             <p className="text-sm text-text-muted mt-0.5">
-              Supabase 네이티브 게시판, AI문서엔진(Lawygo), 결재관리를 이용할 수 있습니다.
+              Supabase 네이티브 게시판, AI문서엔진(LawBoard), 결재관리를 이용할 수 있습니다.
             </p>
           </div>
           <div className="flex rounded-lg border border-slate-200 overflow-hidden bg-slate-50">
@@ -379,11 +379,11 @@ export default function BoardListPage() {
               )}
             </section>
 
-            {/* AI문서엔진 (Lawygo) */}
+            {/* AI문서엔진 (LawBoard) */}
             <section>
               <h2 className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-2">
                 <Sparkles size={16} className="text-primary-500" />
-                AI문서엔진(Lawygo)
+                AI문서엔진(LawBoard)
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {AI_FEATURES.map((feat, i) => (

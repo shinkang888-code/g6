@@ -180,7 +180,7 @@ export default function AdminG6Page() {
           G6(그누보드6) 관리
         </h1>
         <p className="text-sm text-text-muted mt-1">
-          G6 관리자 콘솔 기능을 LawyGo 관리자에서 바로 열 수 있습니다. 연동 URL이 설정되어 있으면 각 메뉴를 G6 관리자 페이지로 이동합니다.
+          G6 관리자 콘솔 기능을 LawBoard 관리자에서 바로 열 수 있습니다. 연동 URL이 설정되어 있으면 각 메뉴를 G6 관리자 페이지로 이동합니다.
         </p>
       </div>
 
@@ -258,7 +258,7 @@ export default function AdminG6Page() {
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
         <p className="text-xs text-text-muted">
           전체 기능 목록 및 경로는 <code className="bg-white px-1 rounded">docs/g6-admin-features.md</code>를 참고하세요.
-          LawyGo 프론트에서 G6 관리 화면을 100% 재구현하려면 G6 측에 관리자용 JSON API가 필요합니다.
+          LawBoard 프론트에서 G6 관리 화면을 100% 재구현하려면 G6 측에 관리자용 JSON API가 필요합니다.
         </p>
       </div>
     </div>

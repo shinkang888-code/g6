@@ -12,7 +12,7 @@ export const WWW_PRODUCTS: {
 }[] = [
   {
     id: "core",
-    name: "LawyGo Core",
+    name: "LawBoard Core",
     tagline: "송무 운영의 시작",
     description: "소형 로펌·1인 사무소를 위한 핵심 송무관리. 사건·기일·고객을 한곳에서.",
     bullets: [
@@ -27,7 +27,7 @@ export const WWW_PRODUCTS: {
   },
   {
     id: "professional",
-    name: "LawyGo Professional",
+    name: "LawBoard Professional",
     tagline: "팀 협업 송무 허브",
     description: "담당자·결재·메신저·수납까지 이어지는 로펌 표준 워크플로우.",
     bullets: [
@@ -41,7 +41,7 @@ export const WWW_PRODUCTS: {
   },
   {
     id: "enterprise",
-    name: "LawyGo Enterprise",
+    name: "LawBoard Enterprise",
     tagline: "기업·그룹 법무 플랫폼",
     description: "조직·결재·연동·보안을 기업 환경에 맞게 구축하는 송무관리 솔루션.",
     bullets: [
@@ -147,7 +147,7 @@ export const WWW_AUDIENCE = [
 export const WWW_TESTIMONIALS = [
   {
     quote:
-      "엑셀과 메모에 흩어져 있던 사건을 LawyGo로 옮긴 뒤, 다음 기일을 놓친 적이 없어요. 대시보드만 보면 오늘 할 일이 정리됩니다.",
+      "엑셀과 메모에 흩어져 있던 사건을 LawBoard로 옮긴 뒤, 다음 기일을 놓친 적이 없어요. 대시보드만 보면 오늘 할 일이 정리됩니다.",
     name: "김○○",
     role: "개인 로펌 · 담당변호사",
   },
@@ -200,7 +200,7 @@ export const WWW_FAQ = [
   },
   {
     q: "소형 로펌도 사용할 수 있나요?",
-    a: "LawyGo Core는 1인 로펌·소형 사무소를 위해 설계되었습니다. 사건·기일·고객·대시보드 핵심 기능을 바로 사용할 수 있습니다.",
+    a: "LawBoard Core는 1인 로펌·소형 사무소를 위해 설계되었습니다. 사건·기일·고객·대시보드 핵심 기능을 바로 사용할 수 있습니다.",
   },
   {
     q: "결재선은 몇 단계까지 지원하나요?",

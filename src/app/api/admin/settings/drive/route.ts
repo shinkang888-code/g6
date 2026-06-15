@@ -54,7 +54,7 @@ export async function GET() {
     hint: !hasStoredCredentials
       ? "서비스 계정 JSON 키를 업로드한 뒤 저장하세요."
       : !stored.rootFolderId?.trim()
-        ? "루트 폴더 ID를 입력하세요. (shinkang888@gmail.com Drive의 lawygo 폴더)"
+        ? "루트 폴더 ID를 입력하세요. (shinkang888@gmail.com Drive의 LawBoard 폴더)"
         : !hasOAuthUpload
           ? "서비스 계정만으로는 파일 업로드가 불가합니다. 아래 「업로드 권한 연결(OAuth)」을 shinkang888@gmail.com 계정으로 완료하세요."
           : !available

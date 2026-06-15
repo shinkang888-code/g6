@@ -6,7 +6,7 @@ import { formatLawJoCode, sanitizeLawHtml } from "@/lib/lawGoKrHtml";
 
 const LAW_GO_KR_ORIGIN = "https://www.law.go.kr";
 const FETCH_HEADERS = {
-  "User-Agent": "Mozilla/5.0 (compatible; LawyGo/1.0; +https://lawygo.vercel.app)",
+  "User-Agent": "Mozilla/5.0 (compatible; LawBoard/1.0; +https://lawboard.vercel.app)",
   Accept: "text/html,application/xhtml+xml",
 };
 

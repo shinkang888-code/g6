@@ -29,7 +29,7 @@ export async function GET() {
     hint: !settings.credentialsBase64
       ? "관리자 > Google Drive에서 서비스 계정 JSON을 등록하세요."
       : !settings.rootFolderId?.trim()
-        ? "루트 폴더 ID가 필요합니다. shinkang888@gmail.com Drive의 lawygo 폴더 ID를 설정하세요."
+        ? "루트 폴더 ID가 필요합니다. shinkang888@gmail.com Drive의 LawBoard 폴더 ID를 설정하세요."
         : !hasOAuth
           ? "파일 업로드를 위해 관리자가 Drive OAuth 업로드 권한을 연결해야 합니다."
           : !available

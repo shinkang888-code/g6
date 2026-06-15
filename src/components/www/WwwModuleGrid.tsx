@@ -46,7 +46,7 @@ export function WwwModuleGrid() {
             <br className="sm:hidden" /> 송무 업무 전체
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-slate-600">
-            LawTop GL 모듈과 대응되는 15개 이상 업무 화면을 LawyGo 하나로 통합합니다.
+            LawTop GL 모듈과 대응되는 15개 이상 업무 화면을 LawBoard 하나로 통합합니다.
           </p>
         </div>
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

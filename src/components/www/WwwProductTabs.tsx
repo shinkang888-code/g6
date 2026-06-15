@@ -15,7 +15,7 @@ export function WwwProductTabs() {
     <section className="bg-white py-20 sm:py-28" id="products">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[#0A1628] sm:text-4xl">나에게 맞는 LawyGo를 선택하세요</h2>
+          <h2 className="text-3xl font-bold text-[#0A1628] sm:text-4xl">나에게 맞는 LawBoard를 선택하세요</h2>
           <p className="mx-auto mt-4 max-w-xl text-slate-500">
             개인 로펌부터 기업 법무팀까지, 규모에 맞는 송무관리 모듈을 제공합니다.
           </p>

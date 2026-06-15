@@ -39,7 +39,7 @@ export function DashboardMockup({ className, glow = "blue" }: Props) {
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
           </div>
           <div className="mx-auto rounded-md bg-white px-3 py-1 text-[10px] text-slate-400">
-            lawygo.app — 업무 대시보드
+            lawboard.app — 업무 대시보드
           </div>
         </div>
 

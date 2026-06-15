@@ -107,7 +107,7 @@ export default function SecurityOverviewPanel({
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">LSCC 보안 콘솔</h2>
-              <p className="text-xs text-slate-400">LawyGo Security Command Center</p>
+              <p className="text-xs text-slate-400">LawBoard Security Command Center</p>
               {data?.viewer && (
                 <p className="text-[11px] text-primary-300 mt-1">
                   관리자: {data.viewer.name} ({data.viewer.loginId})

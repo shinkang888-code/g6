@@ -32,7 +32,7 @@ export function LandingNav({ variant = "light", className }: Props) {
           >
             <Scale size={16} />
           </span>
-          <span className="text-lg">LawyGo</span>
+          <span className="text-lg">LawBoard</span>
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex">

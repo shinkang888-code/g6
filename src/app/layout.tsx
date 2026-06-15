@@ -7,14 +7,14 @@ import { AuthLayout } from "@/components/layout/AuthLayout";
 import { PwaRegister } from "@/components/pwa/PwaRegister";
 
 export const metadata: Metadata = {
-  title: "LawyGo - 법무 관리 시스템",
+  title: "LawBoard - 법무 관리 시스템",
   description: "법무법인을 위한 스마트 사건 관리 플랫폼",
-  applicationName: "LawyGo",
+  applicationName: "LawBoard",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "LawyGo",
+    title: "LawBoard",
   },
   formatDetection: {
     telephone: false,

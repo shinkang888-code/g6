@@ -7,7 +7,7 @@ export function WwwStats() {
   return (
     <section className="border-y border-slate-200/80 bg-[#0A1628] py-16 text-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <p className="text-center text-sm font-medium text-slate-400">숫자로 보는 LawyGo</p>
+        <p className="text-center text-sm font-medium text-slate-400">숫자로 보는 LawBoard</p>
         <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-4">
           {WWW_STATS.map((s, i) => (
             <motion.div

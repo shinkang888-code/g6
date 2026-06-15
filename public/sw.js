@@ -1,5 +1,5 @@
 /**
- * LawyGo PWA Service Worker (설치 가능 조건 + 기본 오프라인 안내)
+ * LawBoard PWA Service Worker (설치 가능 조건 + 기본 오프라인 안내)
  */
 const CACHE = "lawygo-pwa-v1";
 const OFFLINE_URL = "/offline.html";

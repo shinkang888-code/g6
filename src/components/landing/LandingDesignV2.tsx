@@ -23,7 +23,7 @@ export function LandingDesignV2() {
               <h1 className="mt-5 text-3xl font-bold leading-tight text-[#0A1628] sm:text-5xl">
                 복잡한 송무,
                 <br />
-                <span className="text-primary-700">LawyGo</span> 하나로
+                <span className="text-primary-700">LawBoard</span> 하나로
               </h1>
               <p className="mt-5 max-w-lg text-sm leading-relaxed text-slate-600 sm:text-base">
                 사건·기일·의뢰인·결재·자료실을 분산된 엑셀과 메모에서 벗어나 통합 관리하세요.
@@ -102,7 +102,7 @@ export function LandingDesignV2() {
               팀 전체가 같은 데이터로 협업합니다.
             </p>
             <Link href="/login" className="mt-8 inline-flex rounded-full bg-sky-400 px-8 py-3 text-sm font-semibold text-[#0A1628] hover:bg-sky-300">
-              LawyGo 시작하기
+              LawBoard 시작하기
             </Link>
           </div>
         </section>

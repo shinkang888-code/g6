@@ -413,12 +413,12 @@ export function DriveSettingsPanel({ showBackLink = true, compact = false }: Pro
             type="text"
             value={rootFolderId}
             onChange={(e) => setRootFolderId(e.target.value)}
-            placeholder="공유 드라이브 또는 LawyGo 폴더 ID"
+            placeholder="공유 드라이브 또는 LawBoard 폴더 ID"
             className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-mono focus:border-primary-400 focus:ring-2 focus:ring-primary-600/20 outline-none"
           />
           <p className="text-xs text-text-muted mt-1">
             <strong className="text-amber-700">필수:</strong> 서비스 계정은 저장 공간이 없습니다.{" "}
-            <strong>shinkang888@gmail.com</strong> Google Drive에 LawyGo 폴더를 만들고 서비스 계정 이메일을{" "}
+            <strong>shinkang888@gmail.com</strong> Google Drive에 LawBoard 폴더를 만들고 서비스 계정 이메일을{" "}
             <strong>편집자</strong>로 공유한 뒤, 해당 폴더 ID를 아래에 입력하세요.
           </p>
         </div>

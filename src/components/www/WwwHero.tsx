@@ -19,7 +19,7 @@ export function WwwHero() {
           transition={{ duration: 0.5 }}
         >
           <span className="inline-flex items-center rounded-full border border-sky-200/80 bg-sky-50/80 px-4 py-1.5 text-xs font-semibold text-sky-800">
-            송무관리 프로그램 · LawyGo
+            송무관리 프로그램 · LawBoard
           </span>
           <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-bold leading-[1.12] tracking-tight text-[#0A1628] sm:text-5xl lg:text-[3.25rem]">
             사건 수임은 끝이 아닌
@@ -29,7 +29,7 @@ export function WwwHero() {
             </span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-500 sm:text-lg">
-            이제 LawyGo에게 맡겨보세요. 진행 중인 모든 사건의 기일·불변기한·결재·자료를
+            이제 LawBoard에게 맡겨보세요. 진행 중인 모든 사건의 기일·불변기한·결재·자료를
             놓치지 않고 확인하고 알려드립니다.
           </p>
         </motion.div>

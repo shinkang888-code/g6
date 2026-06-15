@@ -41,7 +41,7 @@ export const ENV_SETUP_SECTIONS: { title: string; items: EnvKeyDef[] }[] = [
         key: "GOOGLE_OAUTH_CLIENT_ID",
         label: "Google Client ID",
         placeholder: "123456789-xxxx.apps.googleusercontent.com",
-        hint: "Google Cloud Console → OAuth 클라이언트 ID (웹). 동의 화면 앱 이름은 LawyGo로 설정",
+        hint: "Google Cloud Console → OAuth 클라이언트 ID (웹). 동의 화면 앱 이름은 LawBoard로 설정",
       },
       {
         key: "GOOGLE_OAUTH_CLIENT_SECRET",
